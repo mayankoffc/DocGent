@@ -359,4 +359,56 @@ body {
   .animate-write-across {
     animation: write-across 4s ease-in-out infinite;
   }
+
+  /* Handwriting write-in animation */
+  @keyframes writeIn {
+    0% { 
+      opacity: 0; 
+      transform: translateY(5px) scale(0.8) rotate(-5deg); 
+    }
+    100% { 
+      opacity: var(--target-opacity, 1); 
+      transform: translateY(var(--target-y, 0)) scale(var(--target-scale, 1)) rotate(var(--target-rot, 0deg)); 
+    }
+  }
+
+  /* Graphite pencil effect */
+  .graphite-pencil {
+    filter: url(#pencil-texture);
+    opacity: 0.85;
+  }
+
+  /* Ballpoint ink effect */
+  .ballpoint-ink {
+    color: #0a2472;
+    text-shadow: 0.2px 0.2px 0 rgba(10, 36, 114, 0.3);
+  }
+
+  /* Paper styles */
+  .paper-sheet {
+    background: linear-gradient(to bottom, #fff 0%, #fafafa 100%);
+    background-image: repeating-linear-gradient(
+      transparent 0px,
+      transparent 31px,
+      #e5e5e5 31px,
+      #e5e5e5 32px
+    );
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Scanner mode effects */
+  .scanner-effect {
+    filter: contrast(1.1) brightness(0.98);
+    background-color: #f5f5f0;
+  }
+}
+
+/* Print styles */
+@media print {
+  .no-print { 
+    display: none !important; 
+  }
+  .paper-sheet { 
+    box-shadow: none; 
+  }
 }
