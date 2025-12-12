@@ -228,5 +228,5 @@ export function ProfessionalDocumentEditor({ setSubscriptionModalOpen }: Profess
             </div>
         </div>
     );
+}
 
-    
