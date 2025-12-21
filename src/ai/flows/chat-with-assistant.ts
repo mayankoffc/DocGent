@@ -30,11 +30,7 @@ const prompt = ai.definePrompt({
   name: 'chatWithAssistantPrompt',
   input: {schema: ChatWithAssistantInputSchema},
   output: {schema: ChatWithAssistantOutputSchema},
-  prompt: `You are a helpful AI assistant integrated into a document creation application. Your goal is to assist users with problem-solving, educational questions, and other general inquiries. Be concise and helpful.
-
-User's question: {{{question}}}
-
-Your answer:`,
+  prompt: `Q: {{{question}}}\nA (concise, helpful):`,
 });
 
 const chatWithAssistantFlow = ai.defineFlow(

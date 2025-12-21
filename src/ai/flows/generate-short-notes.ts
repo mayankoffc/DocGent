@@ -30,26 +30,9 @@ const prompt = ai.definePrompt({
   name: 'generateShortNotesPrompt',
   input: {schema: GenerateShortNotesInputSchema},
   output: {schema: GenerateShortNotesOutputSchema},
-  prompt: `You are an expert academic assistant specializing in creating high-quality, structured short notes from a document. Your task is to analyze the provided PDF document and generate notes based on the user's desired level of detail.
-
-**Key Instructions:**
-1.  **Structure:** The notes MUST be well-structured. Use markdown formatting extensively:
-    *   Use headings (\`#\`, \`##\`, \`###\`) for main topics and sub-topics.
-    *   Use bullet points (\`-\` or \`*\`) for key information.
-    *   Use nested bullet points for hierarchical information.
-    *   Use bold text (\`**key term**\`) to highlight important keywords, definitions, and concepts.
-2.  **Clarity and Conciseness:** The language should be clear and easy to understand. Avoid jargon where possible or explain it briefly.
-3.  **Detail Level Adherence:** You must strictly adhere to the requested '{{{detailLevel}}}'.
-    *   **concise:** Generate a brief, high-level summary. Focus only on the main headings and most critical points. The output should be very short.
-    *   **detailed:** Provide a balanced summary. Cover all main topics with key supporting points and definitions. This should be a solid summary for revision.
-    *   **comprehensive:** Create an in-depth set of notes. Include main topics, sub-topics, detailed explanations, definitions, and even examples mentioned in the text. This should be thorough enough for deep study.
-
-**User Request:**
-*   **Detail Level:** {{{detailLevel}}}
-*   **Document to Summarize:** {{media url=pdfDataUri}}
-
-Now, generate the short notes following all instructions precisely.
-`,
+  prompt: `Notes from PDF. Level: {{{detailLevel}}} (concise=brief, detailed=balanced, comprehensive=in-depth).
+Format: markdown (#headings, -bullets, **bold** keywords).
+Doc: {{media url=pdfDataUri}}`,
 });
 
 const generateShortNotesFlow = ai.defineFlow(

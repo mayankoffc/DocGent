@@ -84,40 +84,27 @@ const textGenerationPrompt = ai.definePrompt({
     name: 'generateDocumentTextPrompt',
     input: {schema: GenerateDocumentInputSchema.extend({ isPresentation: z.boolean(), isTimetable: z.boolean() })},
     output: {schema: z.object({ pages: z.array(PageSchema), theme: DocumentThemeSchema })},
-    prompt: `You are an AI document creator and art director. Your main task is to generate the complete content for a '{{{documentType}}}' and a matching visual theme based on the user's request.
+    prompt: `Create '{{{documentType}}}' on: "{{{prompt}}}". Pages: {{{pageCount}}}. Quality: {{{qualityLevel}}}. Theme: {{{theme}}}.
 
-**Overall Goal:** The user wants to create a '{{{documentType}}}' about the following topic: "{{{prompt}}}".
+**Content Rules:**
+- Use markdown (# headings, * lists, **bold**)
+- Exactly {{{pageCount}}} pages
+{{#if isPresentation}}- Title slide → content → Thank You slide{{/if}}
+{{#if isTimetable}}- Single markdown table only{{/if}}
 
-**Your Task Breakdown:**
+**Images ({{{numImages}}}):**
+- Exactly {{{numImages}}} imagePrompts (vector/infographic style, white bg)
+- Distribute across pages effectively
 
-**1. Content Generation (The 'pages' field):**
-   - You MUST write the full content for the document, directly addressing the user's prompt.
-   - The content must be high-quality, well-structured, and formatted using markdown (e.g., # for headings, * for lists).
-   - The document MUST have exactly {{{pageCount}}} pages (or slides).
-   - **Structure Rules:**
-     - {{#if isPresentation}}The structure must be: A Title Slide (short, catchy title based on the prompt), followed by content slides, and a final "Thank You" or "Q&A" slide. Distribute the content logically across the {{{pageCount}}} slides.{{/if}}
-     - {{#if isTimetable}}You are an expert scheduler. Generate a timetable as a single-page markdown table. The 'content' field for the single page must contain ONLY the markdown table. The title field can be the main title of the timetable.{{/if}}
-   - **Image Integration:**
-     - You have a budget to generate exactly {{{numImages}}} images.
-     - You must distribute these images across the pages where they are most effective by generating a unique and descriptive 'imagePrompt' for each.
-     - Image prompts should be for clean, vector-style illustrations or infographics on a plain white background.
-     - Do not generate more or fewer than {{{numImages}}} image prompts in total. If numImages is 0, do not generate any image prompts.
+**Theme Colors:**
+- professional: #fff bg, dark text
+- creative: off-white, vibrant
+- minimalist: off-white, grey
+- presentation: dark bg (#111827), light text
 
-**2. Visual Theme Generation (The 'theme' field):**
-   - You MUST define a visual style in the 'theme' output that matches the user's requested '{{{theme}}}' style.
-   - **Color Palette Rules:**
-     - **professional:** Use a white background ('#ffffff'), dark text, and a professional heading color.
-     - **creative:** Use an off-white background, vibrant colors, and an artistic style.
-     - **minimalist:** Use an off-white background, dark grey text, and a simple, elegant style.
-     - **presentation:** For presentations, ALWAYS use a dark background (e.g., '#111827'), light text, and a vibrant heading color.
-   - **Background/Border Generation (CRITICAL):**
-     - You MUST ALWAYS generate a 'backgroundPrompt' for a decorative page border or background for ALL document types.
-     - The background design should be subtle and not interfere with text readability.
-     - Examples: 'A minimalist geometric pattern with thin gold lines to frame the page' for a professional document, or 'A soft, abstract watercolor wash as a page border' for a creative one. For presentations, this must be a consistent, abstract, professional template background.
+**backgroundPrompt:** Always generate subtle border/background design.
 
-**Generation Quality:** The quality for this entire generation (text and image prompts) must be '{{{qualityLevel}}}'.
-
-Now, based on all these instructions, generate the complete 'pages' and 'theme' objects.
+Generate 'pages' and 'theme' now.
 `,
 });
 

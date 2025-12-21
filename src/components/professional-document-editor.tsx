@@ -155,7 +155,7 @@ export function ProfessionalDocumentEditor({ setSubscriptionModalOpen }: Profess
                                                     <Textarea
                                                         placeholder="Paste your original text here, or upload a PDF to extract text."
                                                         className="min-h-[200px] text-sm pr-10"
-                                                        {...field}
+                                                        {...field} value={field.value || ''}
                                                     />
                                                      <label htmlFor="pdf-upload" className="absolute bottom-2 right-2 cursor-pointer text-muted-foreground hover:text-primary p-2 rounded-md bg-background/50 hover:bg-muted">
                                                         <FileUp className="h-5 w-5" />
@@ -184,7 +184,7 @@ export function ProfessionalDocumentEditor({ setSubscriptionModalOpen }: Profess
                                                         <Textarea
                                                             placeholder="e.g., Make the tone more professional and correct any grammatical errors."
                                                             className="min-h-[140px] bg-background text-base"
-                                                            {...field}
+                                                            {...field} value={field.value || ''}
                                                         />
                                                     </FormControl>
                                                 </div>

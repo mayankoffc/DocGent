@@ -30,12 +30,7 @@ const prompt = ai.definePrompt({
   name: 'generateResumePrompt',
   input: {schema: GenerateResumeInputSchema},
   output: {schema: GenerateResumeOutputSchema},
-  prompt: `You are an expert resume writer. Based on the provided skills and experience, generate a basic resume draft.
-
-Skills: {{{skills}}}
-Experience: {{{experience}}}
-
-Resume Draft:`,
+  prompt: `Resume for: Skills={{{skills}}}, Exp={{{experience}}}. Format: markdown, sections: Summary, Skills, Experience, Education.`,
 });
 
 const generateResumeFlow = ai.defineFlow(

@@ -5,7 +5,7 @@ import { useState, ChangeEvent, useRef, useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { BookOpenCheck, Wand2, Loader2, Printer, FileDown, CloudUpload, FileX2, FileUp } from "lucide-react";
+import { BookOpenCheck, Wand2, Loader2, Printer, FileDown, CloudUpload, FileX2, FileUp, FileText, CheckCircle2, AlertCircle, Clock } from "lucide-react";
 import { marked } from "marked";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
@@ -24,7 +24,7 @@ import {
 } from "@/components/ui/form";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { solveBooklet, SolveBookletInput, SolveBookletOutput } from "@/ai/flows/booklet-solver";
+import { solveBooklet, SolveBookletInput, SolveBookletOutput, solveBookletPage } from "@/ai/flows/booklet-solver";
 import { ScrollArea } from "./ui/scroll-area";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
 import { useAuth } from "@/hooks/use-auth";
@@ -35,16 +35,26 @@ import { useRecentGenerations } from "@/hooks/use-recent-generations";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { extractTextFromPdf } from "@/lib/pdf-utils";
-import { GlobalWorkerOptions } from 'pdfjs-dist';
+import { GlobalWorkerOptions, getDocument } from 'pdfjs-dist';
 import { WritingAnimation } from "./writing-animation";
+import { Progress } from "./ui/progress";
+import { cn } from "@/lib/utils";
 
 
 const MAX_FILE_SIZE = 50 * 1024 * 1024; // 50MB
+const DELAY_BETWEEN_PAGES = 3000; // 3 seconds delay between requests to avoid rate limiting
 
 const formSchema = z.object({
   pdfFile: z.any().refine(file => file instanceof File, "Please upload a PDF file."),
   detailLevel: z.enum(['short', 'medium', 'detailed']).default('detailed'),
 });
+
+interface PageStatus {
+  pageNum: number;
+  status: 'pending' | 'processing' | 'completed' | 'error';
+  result?: string;
+  error?: string;
+}
 
 const fileToDataUri = (file: File): Promise<string> => {
     return new Promise((resolve, reject) => {
@@ -55,9 +65,51 @@ const fileToDataUri = (file: File): Promise<string> => {
     });
 };
 
+// Convert canvas to data URI
+const canvasToDataUri = (canvas: HTMLCanvasElement): string => {
+    return canvas.toDataURL('image/png');
+};
+
+// Extract a single page from PDF as image
+const extractPageAsImage = async (file: File, pageNum: number): Promise<string> => {
+    const arrayBuffer = await file.arrayBuffer();
+    const pdf = await getDocument(arrayBuffer).promise;
+    const page = await pdf.getPage(pageNum);
+    
+    const scale = 2; // Higher quality
+    const viewport = page.getViewport({ scale });
+    
+    const canvas = document.createElement('canvas');
+    const context = canvas.getContext('2d')!;
+    canvas.height = viewport.height;
+    canvas.width = viewport.width;
+    
+    await page.render({
+        canvasContext: context,
+        viewport: viewport,
+    }).promise;
+    
+    return canvasToDataUri(canvas);
+};
+
+// Get total pages count
+const getPdfPageCount = async (file: File): Promise<number> => {
+    const arrayBuffer = await file.arrayBuffer();
+    const pdf = await getDocument(arrayBuffer).promise;
+    return pdf.numPages;
+};
+
+// Delay helper
+const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
 export function BookletSolver({ setSubscriptionModalOpen }: any) {
     const [isLoading, setIsLoading] = useState(false);
     const [isUploading, setIsUploading] = useState(false);
+    const [isAnalyzing, setIsAnalyzing] = useState(false);
+    const [totalPages, setTotalPages] = useState(0);
+    const [currentPage, setCurrentPage] = useState(0);
+    const [pageStatuses, setPageStatuses] = useState<PageStatus[]>([]);
+    const [processingMode, setProcessingMode] = useState<'single' | 'pageByPage'>('single');
     const { toast } = useToast();
     const { user, getAccessToken, signIn } = useAuth();
     const answerKeyRef = useRef<HTMLDivElement>(null);
@@ -66,6 +118,7 @@ export function BookletSolver({ setSubscriptionModalOpen }: any) {
     const result = getToolState();
     const { t } = useTranslation();
     const [fileName, setFileName] = useState<string>("");
+    const abortRef = useRef(false);
 
     useEffect(() => {
         GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/4.5.136/pdf.worker.mjs`;
@@ -79,6 +132,81 @@ export function BookletSolver({ setSubscriptionModalOpen }: any) {
         },
     });
 
+    // Process PDF page by page with rate limiting
+    async function processPageByPage(file: File, detailLevel: string) {
+        const numPages = totalPages;
+        const statuses: PageStatus[] = Array.from({ length: numPages }, (_, i) => ({
+            pageNum: i + 1,
+            status: 'pending' as const,
+        }));
+        setPageStatuses(statuses);
+        
+        let allResults: string[] = [];
+        
+        for (let i = 0; i < numPages; i++) {
+            if (abortRef.current) {
+                toast({ title: "Cancelled", description: "Processing was cancelled." });
+                break;
+            }
+            
+            const pageNum = i + 1;
+            setCurrentPage(pageNum);
+            
+            // Update status to processing
+            setPageStatuses(prev => prev.map((p, idx) => 
+                idx === i ? { ...p, status: 'processing' } : p
+            ));
+            
+            try {
+                // Extract page as image
+                const pageImageUri = await extractPageAsImage(file, pageNum);
+                
+                // Call AI to solve this page
+                const pageResult = await solveBookletPage({
+                    pageImageUri,
+                    pageNumber: pageNum,
+                    totalPages: numPages,
+                    detailLevel: detailLevel as 'short' | 'medium' | 'detailed',
+                });
+                
+                allResults.push(`\n## 📄 Page ${pageNum}\n\n${pageResult.solvedAnswers}`);
+                
+                // Update status to completed
+                setPageStatuses(prev => prev.map((p, idx) => 
+                    idx === i ? { ...p, status: 'completed', result: pageResult.solvedAnswers } : p
+                ));
+                
+                // Rate limiting: Wait before next request (except for last page)
+                if (i < numPages - 1) {
+                    await delay(DELAY_BETWEEN_PAGES);
+                }
+            } catch (error: any) {
+                console.error(`Error processing page ${pageNum}:`, error);
+                
+                // Update status to error
+                setPageStatuses(prev => prev.map((p, idx) => 
+                    idx === i ? { ...p, status: 'error', error: error.message } : p
+                ));
+                
+                allResults.push(`\n## 📄 Page ${pageNum}\n\n⚠️ Error: Could not process this page. ${error.message}`);
+                
+                // If rate limited, wait longer
+                if (error.message?.includes('429') || error.message?.includes('rate') || error.message?.includes('quota')) {
+                    toast({ 
+                        title: "Rate Limited", 
+                        description: "Waiting 10 seconds before retrying...",
+                        variant: "destructive"
+                    });
+                    await delay(10000);
+                } else {
+                    await delay(DELAY_BETWEEN_PAGES);
+                }
+            }
+        }
+        
+        return allResults.join('\n\n---\n');
+    }
+
     async function onSubmit(values: z.infer<typeof formSchema>) {
         if (!values.pdfFile) {
             toast({ variant: 'destructive', title: 'PDF Missing', description: 'Please upload a booklet to solve.' });
@@ -87,20 +215,41 @@ export function BookletSolver({ setSubscriptionModalOpen }: any) {
 
         setIsLoading(true);
         setToolState(null);
+        abortRef.current = false;
+        
         try {
-            const pdfDataUri = await fileToDataUri(values.pdfFile);
-            const input: SolveBookletInput = {
-                pdfDataUri,
-                detailLevel: values.detailLevel,
-            };
-            const output = await solveBooklet(input);
-            setToolState(output);
-            addRecentGeneration({
-                type: 'solver',
-                title: `Solved: ${values.pdfFile.name}`,
-                data: output,
-                formValues: values,
-            });
+            // For large PDFs (>5 pages), use page-by-page processing
+            if (totalPages > 5) {
+                setProcessingMode('pageByPage');
+                const combinedResult = await processPageByPage(values.pdfFile, values.detailLevel);
+                
+                const output: SolveBookletOutput = {
+                    solvedAnswers: combinedResult
+                };
+                setToolState(output);
+                addRecentGeneration({
+                    type: 'solver',
+                    title: `Solved: ${values.pdfFile.name}`,
+                    data: output,
+                    formValues: values,
+                });
+            } else {
+                // For small PDFs, use single request
+                setProcessingMode('single');
+                const pdfDataUri = await fileToDataUri(values.pdfFile);
+                const input: SolveBookletInput = {
+                    pdfDataUri,
+                    detailLevel: values.detailLevel,
+                };
+                const output = await solveBooklet(input);
+                setToolState(output);
+                addRecentGeneration({
+                    type: 'solver',
+                    title: `Solved: ${values.pdfFile.name}`,
+                    data: output,
+                    formValues: values,
+                });
+            }
         } catch (error) {
             console.error(error);
             toast({
@@ -110,8 +259,15 @@ export function BookletSolver({ setSubscriptionModalOpen }: any) {
             });
         } finally {
             setIsLoading(false);
+            setCurrentPage(0);
+            setPageStatuses([]);
         }
     }
+    
+    const handleCancel = () => {
+        abortRef.current = true;
+        toast({ title: "Cancelling...", description: "Stopping after current page completes." });
+    };
     
     const handleFileChange = async (event: ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
@@ -129,7 +285,23 @@ export function BookletSolver({ setSubscriptionModalOpen }: any) {
         setFileName(file.name);
         form.setValue('pdfFile', file);
         setToolState(null); // Clear previous results
-        toast({ title: "File Ready", description: `${file.name} is ready for solving.`});
+        setTotalPages(0);
+        
+        // Analyze PDF to get page count
+        setIsAnalyzing(true);
+        try {
+            const pageCount = await getPdfPageCount(file);
+            setTotalPages(pageCount);
+            toast({ 
+                title: "File Ready", 
+                description: `${file.name} - ${pageCount} pages detected. ${pageCount > 5 ? 'Will process page-by-page to avoid rate limits.' : ''}`
+            });
+        } catch (error) {
+            console.error("Error analyzing PDF:", error);
+            toast({ variant: 'destructive', title: 'Error', description: 'Could not analyze PDF file.' });
+        } finally {
+            setIsAnalyzing(false);
+        }
     };
 
     const renderKaTeX = (html: string) => {
@@ -348,18 +520,32 @@ export function BookletSolver({ setSubscriptionModalOpen }: any) {
                                                     className="flex flex-col items-center justify-center w-full h-48 border-2 border-dashed rounded-lg cursor-pointer bg-muted hover:bg-muted/80"
                                                 >
                                                     <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                                                        <FileUp className="w-8 h-8 mb-4 text-muted-foreground" />
-                                                        {fileName ? (
-                                                             <p className="font-semibold text-primary">{fileName}</p>
+                                                        {isAnalyzing ? (
+                                                            <>
+                                                                <Loader2 className="w-8 h-8 mb-4 text-primary animate-spin" />
+                                                                <p className="font-semibold text-primary">Analyzing PDF...</p>
+                                                                <p className="text-xs text-muted-foreground">Detecting pages</p>
+                                                            </>
+                                                        ) : fileName ? (
+                                                            <>
+                                                                <FileText className="w-8 h-8 mb-4 text-primary" />
+                                                                <p className="font-semibold text-primary">{fileName}</p>
+                                                                {totalPages > 0 && (
+                                                                    <p className="text-xs text-muted-foreground mt-1">
+                                                                        {totalPages} pages • {totalPages > 5 ? 'Page-by-page mode' : 'Single request mode'}
+                                                                    </p>
+                                                                )}
+                                                            </>
                                                         ) : (
                                                             <>
+                                                                <FileUp className="w-8 h-8 mb-4 text-muted-foreground" />
                                                                 <p className="mb-2 text-sm text-muted-foreground"><span className="font-semibold">Click to upload</span> or drag and drop</p>
                                                                 <p className="text-xs text-muted-foreground">PDF (MAX. 50MB)</p>
                                                             </>
                                                         )}
                                                     </div>
                                                     <FormControl>
-                                                        <Input id="pdf-upload" type="file" className="sr-only" accept=".pdf" onChange={handleFileChange} />
+                                                        <Input id="pdf-upload" type="file" className="sr-only" accept=".pdf" onChange={handleFileChange} disabled={isAnalyzing} />
                                                     </FormControl>
                                                 </label>
                                             </div>
@@ -410,7 +596,56 @@ export function BookletSolver({ setSubscriptionModalOpen }: any) {
                         <CardDescription>{t('solverResultDescriptionEmpty')}</CardDescription>
                     </CardHeader>
                     <CardContent className="flex-1 flex flex-col items-center justify-center min-h-0">
-                        {isLoading && (
+                        {isLoading && processingMode === 'pageByPage' && (
+                            <div className="w-full space-y-6 p-4">
+                                {/* Progress Header */}
+                                <div className="text-center space-y-2">
+                                    <div className="flex items-center justify-center gap-2 text-primary">
+                                        <Loader2 className="w-5 h-5 animate-spin" />
+                                        <span className="font-semibold">Processing Page {currentPage} of {totalPages}</span>
+                                    </div>
+                                    <Progress value={(currentPage / totalPages) * 100} className="h-2" />
+                                    <p className="text-xs text-muted-foreground">
+                                        ~{Math.ceil((totalPages - currentPage) * (DELAY_BETWEEN_PAGES / 1000 + 5))} seconds remaining
+                                    </p>
+                                </div>
+                                
+                                {/* Page Status Grid */}
+                                <div className="grid grid-cols-5 sm:grid-cols-8 md:grid-cols-10 gap-2 max-h-[200px] overflow-y-auto p-2">
+                                    {pageStatuses.map((page, idx) => (
+                                        <div
+                                            key={idx}
+                                            className={cn(
+                                                "flex flex-col items-center justify-center p-2 rounded-lg border text-xs transition-all duration-300",
+                                                page.status === 'pending' && "bg-muted/50 text-muted-foreground",
+                                                page.status === 'processing' && "bg-primary/20 border-primary text-primary animate-pulse",
+                                                page.status === 'completed' && "bg-green-500/20 border-green-500 text-green-600",
+                                                page.status === 'error' && "bg-destructive/20 border-destructive text-destructive"
+                                            )}
+                                        >
+                                            {page.status === 'pending' && <Clock className="w-3 h-3 mb-1" />}
+                                            {page.status === 'processing' && <Loader2 className="w-3 h-3 mb-1 animate-spin" />}
+                                            {page.status === 'completed' && <CheckCircle2 className="w-3 h-3 mb-1" />}
+                                            {page.status === 'error' && <AlertCircle className="w-3 h-3 mb-1" />}
+                                            <span>P{page.pageNum}</span>
+                                        </div>
+                                    ))}
+                                </div>
+                                
+                                {/* Cancel Button */}
+                                <Button variant="outline" onClick={handleCancel} className="w-full">
+                                    <FileX2 className="w-4 h-4 mr-2" />
+                                    Cancel Processing
+                                </Button>
+                                
+                                {/* Info */}
+                                <div className="text-center text-xs text-muted-foreground space-y-1">
+                                    <p>📝 Processing each page separately to avoid rate limits</p>
+                                    <p>⏱️ {DELAY_BETWEEN_PAGES / 1000}s delay between pages</p>
+                                </div>
+                            </div>
+                        )}
+                        {isLoading && processingMode === 'single' && (
                             <WritingAnimation />
                         )}
                         {!isLoading && !result && (
@@ -418,6 +653,22 @@ export function BookletSolver({ setSubscriptionModalOpen }: any) {
                                 <div>
                                     <BookOpenCheck className="w-12 h-12 mx-auto mb-4" />
                                     <p>{t('solverResultPlaceholder')}</p>
+                                    {totalPages > 0 && (
+                                        <div className="mt-4 p-3 rounded-lg bg-muted/50 text-sm">
+                                            <div className="flex items-center justify-center gap-2 mb-2">
+                                                <FileText className="w-4 h-4" />
+                                                <span className="font-medium">{fileName}</span>
+                                            </div>
+                                            <p className="text-xs">
+                                                {totalPages} pages detected
+                                                {totalPages > 5 && (
+                                                    <span className="block mt-1 text-primary">
+                                                        Will process page-by-page (~{Math.ceil(totalPages * 8)}s)
+                                                    </span>
+                                                )}
+                                            </p>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         )}

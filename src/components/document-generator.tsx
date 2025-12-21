@@ -8,6 +8,7 @@ import { z } from "zod";
 import { Sparkles, Copy, Printer, Eye, Info, X, FileDown, BookType, StretchHorizontal, FileOutput, Gem, Type, Palette, BookOpen, ImageIcon, Wand2, MonitorPlay, CloudUpload, Crown } from "lucide-react";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
+import { optimizePDF, getUserPageDimensions, formatBytes, getCompressionRatio } from "@/lib/pdf-optimizer";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -327,16 +328,29 @@ export function DocumentGenerator({ setSubscriptionModalOpen }: DocumentGenerato
         }
         
         let orientation: "p" | "l" = 'p';
+        
+        // Get user's default orientation from settings
+        const defaultOrientation = localStorage.getItem('defaultOrientation') || 'portrait';
+        
         if (result.isPresentation) {
                 orientation = 'l';
         } else {
-                orientation = pageElements[0].clientWidth > pageElements[0].clientHeight ? 'l' : 'p';
+                // Use user's preferred orientation if set
+                orientation = defaultOrientation === 'landscape' ? 'l' : 'p';
+                // Or auto-detect from content
+                const autoOrientation = pageElements[0].clientWidth > pageElements[0].clientHeight ? 'l' : 'p';
+                if (!localStorage.getItem('defaultOrientation')) {
+                    orientation = autoOrientation;
+                }
         }
+        
+        // Get user's default page size
+        const userPageDimensions = getUserPageDimensions();
         
         const pdf = new jsPDF({
             orientation: orientation,
             unit: 'px',
-            format: result.isPresentation ? 'a4' : [pageElements[0].clientWidth, pageElements[0].clientHeight],
+            format: result.isPresentation ? 'a4' : (localStorage.getItem('defaultPageSize') ? [userPageDimensions.width, userPageDimensions.height] : [pageElements[0].clientWidth, pageElements[0].clientHeight]),
         });
 
 
@@ -357,7 +371,23 @@ export function DocumentGenerator({ setSubscriptionModalOpen }: DocumentGenerato
             if (i > 0) {
                 pdf.addPage([pdfWidth, pdfHeight], orientation);
             }
-            pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+            
+            // Apply image quality based on compression settings
+            const compressionQuality = (() => {
+                const compression = localStorage.getItem('pdfCompression') || 'medium';
+                switch(compression) {
+                    case 'none': return 1.0;
+                    case 'low': return 0.95;
+                    case 'medium': return 0.85;
+                    case 'high': return 0.75;
+                    case 'maximum': return 0.6;
+                    default: return 0.85;
+                }
+            })();
+            
+            // Convert canvas to JPEG with compression for better file size
+            const compressedImgData = canvas.toDataURL('image/jpeg', compressionQuality);
+            pdf.addImage(compressedImgData, 'JPEG', 0, 0, pdfWidth, pdfHeight);
         }
         
         return pdf.output('blob');
@@ -377,6 +407,24 @@ export function DocumentGenerator({ setSubscriptionModalOpen }: DocumentGenerato
         if (selectedFormat === 'PDF') {
             const blob = await generatePdfBlob();
             if (blob) {
+                const originalSize = blob.size;
+                const maxSizeMB = parseInt(localStorage.getItem('maxDownloadSize') || '10');
+                const sizeMB = originalSize / (1024 * 1024);
+                
+                // Check size limit
+                if (sizeMB > maxSizeMB) {
+                    toast({
+                        title: t('warning') || 'Warning',
+                        description: `PDF size (${formatBytes(originalSize)}) exceeds limit (${maxSizeMB}MB). Consider using higher compression.`,
+                        variant: "destructive"
+                    });
+                } else {
+                    toast({
+                        title: t('success') || 'Success',
+                        description: `PDF generated successfully (${formatBytes(originalSize)})`,
+                    });
+                }
+                
                 const url = URL.createObjectURL(blob);
                 const link = document.createElement('a');
                 link.href = url;
@@ -626,7 +674,7 @@ export function DocumentGenerator({ setSubscriptionModalOpen }: DocumentGenerato
                                                     <Textarea
                                                         placeholder={promptPlaceholders[documentType] || promptPlaceholders['default']}
                                                         className="min-h-[120px] bg-background"
-                                                        {...field} />
+                                                        {...field} value={field.value || ''} />
                                                 </FormControl>
                                             </div>
                                             <FormDescription>

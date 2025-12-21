@@ -36,7 +36,7 @@ export function AppHeader({ activeTool }: AppHeaderProps) {
   const router = useRouter();
 
   return (
-    <header className="sticky top-0 z-10 flex h-16 items-center justify-between gap-4 border-b bg-background/80 px-4 backdrop-blur-md sm:px-6">
+    <header className="sticky top-0 z-10 flex h-16 items-center justify-between gap-4 border-b border-white/[0.06] bg-[rgba(10,10,10,0.8)] px-4 backdrop-blur-xl sm:px-6">
       <Sheet>
         <SheetTrigger asChild>
           <Button variant="outline" size="icon" className="shrink-0 md:hidden">

@@ -1,14 +1,13 @@
 
 "use client";
 
-import { useState } from 'react';
 import { LucideIcon, Sparkles } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from './ui/tooltip';
 import { useTranslation } from '@/hooks/use-translation';
 import { useRouter } from 'next/navigation';
 
-type Tool = 'dashboard' | 'docs' | 'resume' | 'analyzer' | 'converter' | 'storage' | 'exam' | 'notes' | 'solver' | 'blueprint' | 'editor' | 'watermark-adder';
+type Tool = 'dashboard' | 'docs' | 'resume' | 'analyzer' | 'storage' | 'exam' | 'notes' | 'solver' | 'blueprint' | 'editor' | 'watermark-adder';
 
 interface ToolDefinition {
   nameKey: string;
@@ -25,27 +24,43 @@ interface RadialMenuProps {
 }
 
 export function RadialMenu({ tools }: RadialMenuProps) {
-    const [rotation, setRotation] = useState(0);
     const { t } = useTranslation();
     const router = useRouter();
 
-    const radius = 160; // in pixels
+    const radius = 180; // increased radius so tools are further from center
     const numTools = tools.length;
     const angleStep = (2 * Math.PI) / numTools;
 
     return (
-        <div 
-            className="relative w-96 h-96 flex items-center justify-center"
-        >
+        <div className="relative w-[500px] h-[500px] flex items-center justify-center">
+            
+            {/* Outer Decorative Ring - Glowing Glass */}
             <div 
-                className="absolute w-full h-full animate-radial-spin"
+                className="absolute w-[460px] h-[460px] rounded-full animate-radial-spin [animation-duration:120s] pointer-events-none"
                 style={{
-                    transform: `rotate(${rotation}deg)`,
-                    animationDuration: '80s'
+                    background: 'transparent',
+                    border: '1px solid rgba(139, 92, 246, 0.15)',
+                    boxShadow: '0 0 40px rgba(139, 92, 246, 0.08)',
                 }}
+            />
+            
+            {/* Middle Decorative Ring */}
+            <div 
+                className="absolute w-[380px] h-[380px] rounded-full animate-spin-reverse [animation-duration:90s] pointer-events-none"
+                style={{
+                    background: 'transparent',
+                    border: '1px solid rgba(6, 182, 212, 0.12)',
+                    boxShadow: '0 0 30px rgba(6, 182, 212, 0.06)',
+                }}
+            />
+
+            {/* Tools rotating container */}
+            <div 
+                className="absolute w-full h-full animate-radial-spin z-10"
+                style={{ animationDuration: '80s' }}
             >
                 {tools.map((tool, index) => {
-                    const angle = index * angleStep;
+                    const angle = index * angleStep - Math.PI / 2; // Start from top
                     const x = radius * Math.cos(angle);
                     const y = radius * Math.sin(angle);
 
@@ -56,22 +71,25 @@ export function RadialMenu({ tools }: RadialMenuProps) {
                                     <button
                                         onClick={() => router.push(`/tool/${tool.tool}`)}
                                         className={cn(
-                                            "absolute w-20 h-20 rounded-full flex items-center justify-center transition-all duration-300 ease-in-out cursor-pointer",
-                                            "shadow-lg z-10 hover:scale-110 hover:z-20",
-                                            tool.bgColor
+                                            "absolute w-16 h-16 rounded-2xl flex items-center justify-center transition-all duration-300 ease-in-out cursor-pointer",
+                                            "hover:scale-125 hover:z-30 hover:shadow-2xl",
                                         )}
                                         style={{
-                                            top: `calc(50% - 40px)`,
-                                            left: `calc(50% - 40px)`,
-                                            transform: `translate(${x}px, ${y}px) rotate(${-rotation}deg)`,
+                                            top: `calc(50% - 32px)`,
+                                            left: `calc(50% - 32px)`,
+                                            transform: `translate(${x}px, ${y}px)`,
+                                            background: 'linear-gradient(135deg, rgba(30, 30, 40, 0.9) 0%, rgba(20, 20, 30, 0.95) 100%)',
+                                            backdropFilter: 'blur(10px)',
+                                            border: '1px solid rgba(255, 255, 255, 0.1)',
+                                            boxShadow: `0 4px 20px rgba(0, 0, 0, 0.4), 0 0 20px ${tool.color.includes('violet') ? 'rgba(139, 92, 246, 0.2)' : tool.color.includes('cyan') ? 'rgba(6, 182, 212, 0.2)' : 'rgba(244, 114, 182, 0.2)'}`,
                                         }}
                                         aria-label={t(tool.nameKey as any)}
                                     >
-                                        <tool.icon className={cn("w-10 h-10", tool.color)} />
+                                        <tool.icon className={cn("w-7 h-7", tool.color)} />
                                     </button>
                                 </TooltipTrigger>
-                                <TooltipContent side="top" align="center">
-                                    <p>{t(tool.nameKey as any)}</p>
+                                <TooltipContent side="top" align="center" className="z-50">
+                                    <p className="font-medium">{t(tool.nameKey as any)}</p>
                                 </TooltipContent>
                             </Tooltip>
                         </TooltipProvider>
@@ -79,21 +97,27 @@ export function RadialMenu({ tools }: RadialMenuProps) {
                 })}
             </div>
 
-            {/* Central Decorative Element */}
-            <div className="absolute w-40 h-40 bg-card rounded-full flex flex-col items-center justify-center text-center p-4 shadow-inner border animate-create-glow group">
-                 <div className="absolute inset-0 rounded-full bg-primary/10 transition-opacity opacity-0 group-hover:opacity-100 duration-500"></div>
-                 <div className="relative z-10 flex flex-col items-center">
-                    <Sparkles className="w-12 h-12 text-primary icon-glow transition-transform duration-500 group-hover:scale-110" />
-                </div>
+            {/* Central Element - Small Liquid Glass Orb */}
+            <div 
+                className="absolute w-20 h-20 rounded-full flex items-center justify-center group cursor-pointer z-20"
+                style={{
+                    background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.2) 0%, rgba(6, 182, 212, 0.15) 50%, rgba(244, 114, 182, 0.2) 100%)',
+                    backdropFilter: 'blur(16px)',
+                    WebkitBackdropFilter: 'blur(16px)',
+                    border: '1px solid rgba(255, 255, 255, 0.15)',
+                    boxShadow: '0 8px 32px rgba(139, 92, 246, 0.25), inset 0 2px 4px rgba(255, 255, 255, 0.1), 0 0 40px rgba(139, 92, 246, 0.15)',
+                }}
+                onClick={() => router.push('/tool/dashboard')}
+            >
+                {/* Glass shine effect */}
+                <div 
+                    className="absolute inset-1 rounded-full pointer-events-none"
+                    style={{
+                        background: 'radial-gradient(circle at 30% 25%, rgba(255, 255, 255, 0.25), transparent 50%)',
+                    }}
+                />
+                <Sparkles className="w-8 h-8 text-primary drop-shadow-[0_0_12px_rgba(139,92,246,0.9)] transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12" />
             </div>
-
-            {/* Decorative Rings */}
-            <div 
-                className="absolute w-80 h-80 rounded-full border border-dashed border-primary/20 animate-spin-reverse [animation-duration:60s]"
-            ></div>
-            <div 
-                className="absolute w-[26rem] h-[26rem] rounded-full border border-dotted border-secondary/20 animate-radial-spin [animation-duration:80s]"
-            ></div>
         </div>
     );
 }

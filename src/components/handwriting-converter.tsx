@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Download, RefreshCw, Wand2 } from "lucide-react";
 import jsPDF from "jspdf";
+import { getUserPageDimensions, formatBytes } from "@/lib/pdf-optimizer";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -544,22 +545,43 @@ export function HandwritingConverter() {
       return;
     }
 
+    // Get user's page settings
+    const userPageDimensions = getUserPageDimensions();
+    const defaultOrientation = localStorage.getItem('defaultOrientation') || 'portrait';
+    const pageSize = localStorage.getItem('defaultPageSize') || 'A4';
+    
     const pdf = new jsPDF({
-      orientation: 'p',
+      orientation: defaultOrientation === 'landscape' ? 'l' : 'p',
       unit: 'mm',
-      format: 'a4',
+      format: pageSize.toLowerCase(),
     });
 
     const htmlContent = generateHtmlForPdf(sourceText, fontStyle, randomSeed, inkThickness[0], cleanMode);
 
     pdf.html(htmlContent, {
-      callback: function (pdf) {
-        pdf.save(`handwritten-note-${cleanMode ? 'clean' : 'scanned'}.pdf`);
-        toast({ title: 'Download Started', description: `Your note is being downloaded as ${cleanMode ? 'clean' : 'scanned'} PDF.` });
+      callback: function (doc) {
+        const pdfBlob = doc.output('blob');
+        const sizeMB = pdfBlob.size / (1024 * 1024);
+        const maxSizeMB = parseInt(localStorage.getItem('maxDownloadSize') || '10');
+        
+        doc.save(`handwritten-note-${cleanMode ? 'clean' : 'scanned'}.pdf`);
+        
+        if (sizeMB > maxSizeMB) {
+          toast({
+            title: 'Warning',
+            description: `PDF size (${formatBytes(pdfBlob.size)}) exceeds limit (${maxSizeMB}MB)`,
+            variant: 'destructive'
+          });
+        } else {
+          toast({
+            title: 'Download Started',
+            description: `Note downloaded (${formatBytes(pdfBlob.size)})`
+          });
+        }
       },
       x: 0,
       y: 0,
-      width: 210,
+      width: defaultOrientation === 'landscape' ? 297 : 210,
       windowWidth: 794,
     });
   };

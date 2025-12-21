@@ -37,8 +37,6 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Separator } from '@/components/ui/separator';
 import { Logo } from '@/components/icons';
-import { AppHeader } from '@/components/header';
-import { AiAssistant } from '@/components/ai-assistant';
 import { useAuth } from '@/hooks/use-auth';
 import { Button } from '@/components/ui/button';
 import { SubscriptionModal } from '@/components/subscription-modal';
@@ -185,7 +183,7 @@ export default function ToolLayout({
             <SidebarMenuItem>
               <SidebarMenuButton
                 onClick={() => setSubscriptionModalOpen(true)}
-                className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white hover:opacity-90"
+                className="bg-amber-500/20 text-amber-400 hover:bg-amber-500/30 border border-amber-500/30 backdrop-blur-md transition-all"
                 tooltip="Upgrade to Premium"
               >
                 <Crown />
@@ -208,7 +206,7 @@ export default function ToolLayout({
           </SidebarMenu>
         </SidebarContent>
         <SidebarFooter>
-          <div className="flex items-center gap-3 p-3">
+          <div className="flex items-center gap-3 p-3 mx-2 mb-2 rounded-xl bg-white/[0.03] backdrop-blur-md border border-white/[0.06]">
             <Avatar>
               <AvatarImage src={user?.photoURL || "https://placehold.co/40x40"} data-ai-hint="user avatar" />
               <AvatarFallback>{user?.displayName?.charAt(0) || user?.email?.charAt(0)?.toUpperCase() || 'G'}</AvatarFallback>

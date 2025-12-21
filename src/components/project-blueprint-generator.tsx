@@ -373,7 +373,7 @@ export function ProjectBlueprintGenerator() {
                                     <FormItem>
                                         <FormLabel>Project Idea</FormLabel>
                                         <FormControl>
-                                            <Input placeholder="e.g., A simple rainwater harvesting system for a small garden" {...field} />
+                                            <Input placeholder="e.g., A simple rainwater harvesting system for a small garden" {...field} value={field.value || ''} />
                                         </FormControl>
                                         <FormDescription>
                                             Be as descriptive as you can for the best results.

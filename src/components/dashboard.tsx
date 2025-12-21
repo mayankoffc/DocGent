@@ -21,7 +21,7 @@ import { Skeleton } from "./ui/skeleton";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 
-type Tool = 'dashboard' | 'docs' | 'resume' | 'analyzer' | 'converter' | 'storage' | 'exam' | 'notes' | 'solver' | 'blueprint' | 'editor' | 'watermark-adder' | 'handwriting';
+type Tool = 'dashboard' | 'docs' | 'resume' | 'analyzer' | 'storage' | 'exam' | 'notes' | 'solver' | 'blueprint' | 'editor' | 'watermark-adder' | 'handwriting';
 
 export const tools: {
     nameKey: string;
@@ -41,7 +41,6 @@ export const tools: {
     { nameKey: "blueprintToolName", descriptionKey: "blueprintToolDescription", icon: DraftingCompass, tool: "blueprint", color: "text-sky-600", bgColor: "bg-sky-100 dark:bg-sky-900/30", gradient: "from-sky-400 to-blue-500" },
     { nameKey: "resumeToolName", descriptionKey: "resumeToolDescription", icon: User, tool: "resume", color: "text-orange-600", bgColor: "bg-orange-100 dark:bg-orange-900/30", gradient: "from-orange-400 to-red-500" },
     { nameKey: "analyzerToolName", descriptionKey: "analyzerToolDescription", icon: ScanText, tool: "analyzer", color: "text-pink-600", bgColor: "bg-pink-100 dark:bg-pink-900/30", gradient: "from-pink-500 to-rose-500" },
-    { nameKey: "converterToolName", descriptionKey: "converterToolDescription", icon: File, tool: "converter", color: "text-teal-600", bgColor: "bg-teal-100 dark:bg-teal-900/30", gradient: "from-teal-400 to-cyan-500" },
     { nameKey: "handwritingToolName", descriptionKey: "handwritingToolDescription", icon: PenSquare, tool: "handwriting", color: "text-red-600", bgColor: "bg-red-100 dark:bg-red-900/30", gradient: "from-red-500 to-orange-600" },
 ];
 
@@ -93,14 +92,18 @@ export function Dashboard() {
             </div>
             
             <div className="relative">
-                <Card className="lg:col-span-2 bg-gradient-to-br from-primary via-purple-600 to-violet-700 text-white p-8 flex flex-col justify-between rounded-3xl min-h-[200px] shadow-2xl shadow-primary/20">
-                   <div>
-                     <h2 className="text-3xl font-bold font-headline">{t('dashboardAiContentGenerator')}</h2>
-                     <p className="mt-2 text-purple-200 max-w-lg">{t('dashboardGeneratorDescription')}</p>
+                <Card className="lg:col-span-2 bg-[rgba(20,20,20,0.7)] backdrop-blur-2xl text-white p-8 flex flex-col justify-between rounded-3xl min-h-[200px] border border-white/[0.08] shadow-[0_8px_32px_rgba(0,0,0,0.4),inset_0_1px_0_rgba(255,255,255,0.1)] relative overflow-hidden">
+                   {/* Glass shine effect */}
+                   <div className="absolute inset-0 bg-gradient-to-br from-white/[0.08] via-transparent to-transparent pointer-events-none" />
+                   <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+                   
+                   <div className="relative z-10">
+                     <h2 className="text-3xl font-bold font-headline bg-gradient-to-r from-white via-white/90 to-white/70 bg-clip-text text-transparent">{t('dashboardAiContentGenerator')}</h2>
+                     <p className="mt-2 text-white/60 max-w-lg">{t('dashboardGeneratorDescription')}</p>
                    </div>
-                   <div className="mt-8">
+                   <div className="mt-8 relative z-10">
                         <Link href="/tool/docs" passHref>
-                          <Button className="bg-white/20 hover:bg-white/30 text-white rounded-full">
+                          <Button className="bg-white/10 hover:bg-white/20 text-white rounded-full border border-white/10 backdrop-blur-md transition-all duration-300 hover:border-white/20">
                               {t('dashboardGetStarted')} <ArrowRight className="ml-2 w-4 h-4"/>
                           </Button>
                         </Link>
@@ -137,7 +140,7 @@ export function Dashboard() {
 
                         return (
                         <Link href={`/tool/${tool.tool}`} key={tool.tool} passHref>
-                          <Card className="group cursor-pointer transition-all duration-300 hover:shadow-xl hover:-translate-y-1 relative h-full">
+                          <Card className="group cursor-pointer transition-all duration-300 hover:-translate-y-1 relative h-full bg-[rgba(20,20,20,0.6)] backdrop-blur-xl border-white/[0.08] hover:bg-[rgba(30,30,30,0.7)] hover:border-white/[0.12]">
                               {isPremium && (
                                 isPremiumUser ? (
                                     <Badge variant="secondary" className="badge-glossy animate-shine absolute -top-2 -right-2 bg-gradient-to-br from-green-500 to-emerald-600 text-white border-none shadow-md">

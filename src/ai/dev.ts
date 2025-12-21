@@ -17,5 +17,4 @@ import '@/ai/flows/get-app-settings.ts';
 import '@/ai/flows/update-app-settings.ts';
 import '@/ai/flows/send-otp.ts';
 import '@/ai/flows/reset-password-flow.ts';
-import '@/ai/flows/convert-document.ts';
 import '@/ai/flows/handwriting-converter.ts';

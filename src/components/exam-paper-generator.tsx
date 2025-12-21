@@ -605,7 +605,7 @@ export function ExamPaperGenerator({ setSubscriptionModalOpen }: any) {
                                         <FormItem>
                                             <FormLabel>Exam Title</FormLabel>
                                             <FormControl>
-                                                <Input placeholder="e.g., Final Term Physics" {...field} />
+                                                <Input placeholder="e.g., Final Term Physics" {...field} value={field.value || ''} />
                                             </FormControl>
                                             <FormMessage />
                                         </FormItem>
@@ -619,7 +619,7 @@ export function ExamPaperGenerator({ setSubscriptionModalOpen }: any) {
                                             <FormItem>
                                                 <FormLabel>Standard / Grade</FormLabel>
                                                 <FormControl>
-                                                    <Input placeholder="e.g., 12th" {...field} />
+                                                    <Input placeholder="e.g., 12th" {...field} value={field.value || ''} />
                                                 </FormControl>
                                                 <FormMessage />
                                             </FormItem>
@@ -632,7 +632,7 @@ export function ExamPaperGenerator({ setSubscriptionModalOpen }: any) {
                                             <FormItem>
                                                 <FormLabel>Subject</FormLabel>
                                                 <FormControl>
-                                                    <Input placeholder="e.g., Mathematics" {...field} />
+                                                    <Input placeholder="e.g., Mathematics" {...field} value={field.value || ''} />
                                                 </FormControl>
                                                 <FormMessage />
                                             </FormItem>
@@ -698,7 +698,7 @@ export function ExamPaperGenerator({ setSubscriptionModalOpen }: any) {
                                             <FormItem>
                                                 <FormLabel>Total Marks</FormLabel>
                                                 <FormControl>
-                                                    <Input placeholder="e.g., 70" {...field} />
+                                                    <Input placeholder="e.g., 70" {...field} value={field.value || ''} />
                                                 </FormControl>
                                                 <FormMessage />
                                             </FormItem>
@@ -711,7 +711,7 @@ export function ExamPaperGenerator({ setSubscriptionModalOpen }: any) {
                                             <FormItem>
                                                 <FormLabel>Time Allotted</FormLabel>
                                                 <FormControl>
-                                                    <Input placeholder="e.g., 3 Hours" {...field} />
+                                                    <Input placeholder="e.g., 3 Hours" {...field} value={field.value || ''} />
                                                 </FormControl>
                                                 <FormMessage />
                                             </FormItem>
@@ -728,7 +728,7 @@ export function ExamPaperGenerator({ setSubscriptionModalOpen }: any) {
                                                 <Textarea
                                                     placeholder="Paste the syllabus or list the topics to be covered. e.g., Chapter 1: Chemical Reactions, Chapter 2: Acids, Bases and Salts"
                                                     className="min-h-[120px]"
-                                                    {...field} />
+                                                    {...field} value={field.value || ''} />
                                             </FormControl>
                                             <FormDescription>
                                                 Be specific for the best results.

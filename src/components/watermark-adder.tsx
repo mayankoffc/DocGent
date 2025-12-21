@@ -259,7 +259,7 @@ export function WatermarkAdder({ setSubscriptionModalOpen }: { setSubscriptionMo
                                                 render={({ field }) => (
                                                     <FormItem>
                                                         <FormLabel className="flex items-center gap-2"><Type/> Watermark Text</FormLabel>
-                                                        <FormControl><Input placeholder="e.g., Confidential" {...field} /></FormControl>
+                                                        <FormControl><Input placeholder="e.g., Confidential" {...field} value={field.value || ''} /></FormControl>
                                                         <FormMessage />
                                                     </FormItem>
                                                 )}

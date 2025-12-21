@@ -46,7 +46,7 @@ import { IllustrationGenerator } from '@/components/illustration-generator';
 import { ExamPaperGenerator } from '@/components/exam-paper-generator';
 import { ShortNotesGenerator } from '@/components/short-notes-generator';
 import { BookletSolver } from '@/components/booklet-solver';
-import { AppHeader } from '@/components/header';
+import { AppHeader } from '../../../src/components/header';
 import { SettingsPage } from '@/components/settings';
 import { AiAssistant } from '@/components/ai-assistant';
 import { useAuth } from '@/hooks/use-auth';

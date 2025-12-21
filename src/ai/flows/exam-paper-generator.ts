@@ -81,95 +81,23 @@ const textGenerationPrompt = ai.definePrompt({
     answerKeyContent: GenerateExamPaperOutputSchema.shape.answerKeyContent,
     blueprintContent: GenerateExamPaperOutputSchema.shape.blueprintContent,
   })},
-  prompt: `You are an expert educator and question paper creator. Your task is to create a high-quality, official-looking exam paper, an answer key, and optionally a blueprint based on the user's specifications. The final output must look exactly like a real exam paper.
+  prompt: `Exam Paper Generator. Use validateExamMarks tool FIRST to validate marks sum={{{totalMarks}}}.
 
-**CRITICAL TWO-STEP PROCESS: You MUST follow this procedure.**
-1.  **PROPOSE & VALIDATE (MANDATORY FIRST STEP):** First, you MUST decide on a list of marks for all questions. Then, you MUST use the \`validateExamMarks\` tool to confirm that your proposed marks distribution is valid.
-    {{#if isSectionWise}}
-    *   **SECTION WISE MODE:** The user has provided the exact number of questions for each mark type. You MUST use this structure. The paper will have sections. You MUST use the \`validateExamMarks\` tool with the corresponding total marks to confirm validity. If the tool returns \`false\`, you MUST inform the user of the error and stop.
-    {{else if isMCQOnly}}
-    *   **MCQ MODE:** You MUST create a list of marks for **exactly {{{numQuestions}}}** questions. Then, you MUST use the \`validateExamMarks\` tool to confirm that **(A) the sum of your proposed marks equals the user's requested \`totalMarks\`** AND **(B) the total number of items in your list is exactly equal to \`numQuestions\`**. If the tool returns \`false\`, you MUST revise and call the tool again until it returns \`true\`.
-    {{else}}
-    *   **STANDARD MODE:** You MUST decide on a balanced list of marks for a variety of question types (MCQs, Short, Long, etc.) that adds up to the \`totalMarks\`. The number of questions is up to you to decide based on the subject and difficulty. You MUST use the \`validateExamMarks\` tool to confirm that the sum of your proposed marks equals the user's requested \`totalMarks\`. **Do not use the \`numQuestions\` parameter in the tool.**
-    {{/if}}
-    You cannot proceed to step 2 until the validation is successful. If validation fails after a retry, you must stop and inform the user about the mismatch.
-2.  **GENERATE CONTENT (ONLY AFTER VALIDATION):** Once validation is successful, you will then generate the full exam paper content, the answer key (if requested), and the blueprint (if requested) using that validated list of marks.
+**Specs:** Title={{{examTitle}}}, Std={{{standard}}}, Sub={{{subject}}}, Lang={{{language}}}, Curriculum={{{curriculum}}}, Difficulty={{{difficulty}}}, Time={{{timeAllotted}}}, Marks={{{totalMarks}}}
+**Syllabus:** {{{syllabus}}}
 
-**Key Instructions for Generation:**
-1.  **Language:** You MUST generate the entire content (header, instructions, questions, answer key, blueprint) in the requested language: **{{{language}}}**.
-2.  **Question Quality & Pattern:**
-    {{#if isMCQOnly}}
-    *   **MCQ Only:** Generate ONLY Multiple Choice Questions (MCQs). Each question must have four options: (A), (B), (C), and (D). The layout must be clean and well-formatted.
-    {{else}}
-    *   **Modern Question Types:** The paper must include a mix of modern question patterns: MCQs, Assertion-Reason, Case-Study based questions, Short Answer, and Long Answer questions. Create a balanced and comprehensive paper.
-    {{/if}}
-3.  **Question Style (CRITICAL):**
-    *   {{#if competencyPercentage}}
-        **Competency-Based Questions:** You MUST ensure that approximately **{{{competencyPercentage}}}%** of the questions are competency-based. These questions should not be simple recall, but require application, analysis, and critical thinking skills. This applies to all modes, including section-wise.
-    {{/if}}
-    *   {{#if includePYQs}}
-        **Previous Year Questions (PYQs) Pattern (Premium):** You MUST generate questions that are similar in style, pattern, and difficulty to Previous Year Questions for competitive exams related to this subject and standard.
-    {{/if}}
-    *   {{#if useOriginalQuestions}}
-        **Original Questions:** You MUST generate new, original AI-created practice questions. Do not use common textbook examples. The questions should be unique and creative while strictly adhering to the syllabus and curriculum.
-    {{/if}}
-4.  **Formatting (VERY IMPORTANT):**
-    *   The document must be formatted perfectly in markdown.
-    *   **Header:** Start with the exam title, standard, and subject at the top, each on a new line and centered (e.g., using \`# \`, \`## \`, \`### \`). Below this, add a single line with "**Time Allotted: {{{timeAllotted}}}**" and "**Maximum Marks: {{{totalMarks}}}**" separated by a placeholder ('----------') to be flexed apart. The header is NOT part of the question list and should NOT be numbered.
-    *   **Instructions:** After the header, you MUST include a section titled "**General Instructions**" followed by a numbered list of instructions. This section must be separate from the questions and should have a clear visual separation (e.g., a horizontal rule \`---\` before it). The entire instructions block should be bold.
-    *   **Structure:**
-        {{#if isSectionWise}}
-        *   **Section-Based Layout:** The paper MUST be divided into sections (e.g., Section A, Section B). Each section should contain questions of a specific mark value as requested by the user.
-        {{else}}
-        *   **Simple List Layout:** Provide a simple, continuous numbered list of questions (e.g., \`1. ...\`, \`2. ...\`). **Do NOT use sections (e.g., Section A, B, C).**
-        {{/if}}
-5.  **Marks Allocation (CRITICAL):**
-    *   You MUST allocate the exact marks from your validated list to every single question.
-    *   The marks for each question must be displayed at the **end of the question line**, enclosed in square brackets, e.g., \`[1]\`, \`[2]\`, \`[5]\`.
-6.  **Answer Key (CRITICAL REQUIREMENT):**
-    *   {{#if addAnswerKey}}
-        You MUST generate a detailed, solved answer key for **every single question** in the 'answerKeyContent' field.
-        *   **Style:** For non-MCQ papers, the answers should be written as if by a top-scoring student—clear, comprehensive, and well-explained. The answer key MUST be well-structured. Use markdown headings for each answer number (e.g., \`### Answer 1\`, \`### Answer 2\`) and use bullet points and bold text for clarity. Start the answer key with a title "**Answer Key**".
-        *   **MCQ Answer Key:** For MCQ-only papers, the answer key MUST be in a single, compact block of text (e.g., \`1-B, 2-C, 3-A, ...\`).
-    *   {{else}}
-        Do NOT include an answer key. The 'answerKeyContent' field should be left empty.
-    {{/if}}
-7. **Blueprint (If Requested - Premium):** 
-    * {{#if generateBlueprint}}You MUST create a detailed blueprint in the 'blueprintContent' field. The blueprint MUST be a markdown table with the following columns: \`| Chapter/Topic | Question Types (e.g., MCQ, Short Answer) | Total Marks |\`. It should summarize the paper structure, showing the distribution of marks across the syllabus topics.{{else}}Do NOT generate a blueprint. The 'blueprintContent' field should be left empty.{{/if}}
+**Mode:**
+{{#if isSectionWise}}Section-wise: MCQ={{{numMCQs}}}, 1M={{{num1Mark}}}, 2M={{{num2Mark}}}, 3M={{{num3Mark}}}, 4M={{{num4Mark}}}
+{{else if isMCQOnly}}MCQ Only: {{{numQuestions}}} questions, 4 options each (A-D)
+{{else}}Standard: Mix of MCQ, Short, Long answers{{/if}}
 
-**User Specifications:**
-*   **Exam Title:** {{{examTitle}}}
-*   **Standard/Grade:** {{{standard}}}
-*   **Subject:** {{{subject}}}
-*   **Language:** {{{language}}}
-*   **Curriculum:** {{{curriculum}}}
-*   **Syllabus to Cover:** {{{syllabus}}}
-*   **Difficulty Level:** {{{difficulty}}}
-*   **Total Marks (Strict Rule):** {{{totalMarks}}}
-*   **Time Allotted:** {{{timeAllotted}}}
-{{#if isSectionWise}}
-*   **Generation Mode:** Section Wise
-*   **Section Breakdown:**
-    *   MCQs (1 Mark): {{{numMCQs}}} questions
-    *   1-Mark Questions: {{{num1Mark}}} questions
-    *   2-Mark Questions: {{{num2Mark}}} questions
-    *   3-Mark Questions: {{{num3Mark}}} questions
-    *   4-Mark Questions: {{{num4Mark}}} questions
-{{else if isMCQOnly}}
-*   **Generation Mode:** MCQ Only
-*   **Number of Questions (Strict Rule):** {{{numQuestions}}}
-{{else}}
-*   **Generation Mode:** Standard (Mixed Questions)
-{{/if}}
-*   **Question Style Preferences:**
-    *   Competency-Based Questions Percentage: {{#if competencyPercentage}}{{{competencyPercentage}}}%{{else}}Not specified{{/if}}
-    *   Use PYQ Pattern: {{#if includePYQs}}Yes (Premium){{else}}No{{/if}}
-    *   Generate Original Questions: {{#if useOriginalQuestions}}Yes{{else}}No{{/if}}
-*   **Generate Answer Key:** {{#if addAnswerKey}}Yes{{else}}No{{/if}}
-*   **Generate Blueprint:** {{#if generateBlueprint}}Yes (Premium){{else}}No{{/if}}
+**Style:** {{#if competencyPercentage}}Competency={{{competencyPercentage}}}%{{/if}} {{#if includePYQs}}PYQ-pattern{{/if}} {{#if useOriginalQuestions}}Original-only{{/if}}
 
-Now, follow the two-step process: First, propose and validate the marks distribution. Second, generate all requested content, ensuring you follow all Question Style preferences.
-`,
+**Format:** Markdown, Header(#title,time,marks), Instructions, Questions with [marks] at end
+{{#if addAnswerKey}}**AnswerKey:** Full solutions, markdown headings per answer{{/if}}
+{{#if generateBlueprint}}**Blueprint:** Table |Chapter|QType|Marks|{{/if}}
+
+Generate now.`,
 });
 
 const generateExamPaperFlow = ai.defineFlow(

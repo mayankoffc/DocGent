@@ -9,6 +9,7 @@ import { FileSignature, Wand2, Loader2, CloudUpload, FileDown, Printer, FileX2, 
 import { marked } from "marked";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
+import { getUserPageDimensions, formatBytes } from "@/lib/pdf-optimizer";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -142,8 +143,26 @@ export function ShortNotesGenerator({ setSubscriptionModalOpen }: any) {
             ignoreElements: (element) => element.classList.contains('ignore-in-pdf'),
         });
         
-        const imgData = canvas.toDataURL('image/png');
-        const pdf = new jsPDF('p', 'px', 'a4');
+        // Apply compression settings
+        const compressionQuality = (() => {
+            const compression = localStorage.getItem('pdfCompression') || 'medium';
+            switch(compression) {
+                case 'none': return 1.0;
+                case 'low': return 0.95;
+                case 'medium': return 0.85;
+                case 'high': return 0.75;
+                case 'maximum': return 0.6;
+                default: return 0.85;
+            }
+        })();
+        
+        const imgData = canvas.toDataURL('image/jpeg', compressionQuality);
+        
+        // Use user's page settings
+        const userPageDimensions = getUserPageDimensions();
+        const defaultOrientation = localStorage.getItem('defaultOrientation') || 'portrait';
+        
+        const pdf = new jsPDF(defaultOrientation === 'landscape' ? 'l' : 'p', 'px', [userPageDimensions.width, userPageDimensions.height]);
 
         const pdfWidth = pdf.internal.pageSize.getWidth();
         const pdfHeight = pdf.internal.pageSize.getHeight();
@@ -157,7 +176,7 @@ export function ShortNotesGenerator({ setSubscriptionModalOpen }: any) {
         for (let i = 0; i < totalPages; i++) {
             if (i > 0) pdf.addPage();
             let yPos = -i * pdfHeight;
-            pdf.addImage(imgData, 'PNG', 0, yPos, pdfWidth, canvasHeightInPdf);
+            pdf.addImage(imgData, 'JPEG', 0, yPos, pdfWidth, canvasHeightInPdf);
         }
         return pdf.output('blob');
     };
@@ -166,6 +185,22 @@ export function ShortNotesGenerator({ setSubscriptionModalOpen }: any) {
         toast({ title: t('toastPreparingDownloadTitle'), description: t('toastNotesPDFDescription') });
         const blob = await generatePdfBlob();
         if (blob) {
+            const sizeMB = blob.size / (1024 * 1024);
+            const maxSizeMB = parseInt(localStorage.getItem('maxDownloadSize') || '10');
+            
+            if (sizeMB > maxSizeMB) {
+                toast({
+                    title: 'Warning',
+                    description: `PDF size (${formatBytes(blob.size)}) exceeds limit (${maxSizeMB}MB)`,
+                    variant: "destructive"
+                });
+            } else {
+                toast({
+                    title: 'Success',
+                    description: `PDF generated (${formatBytes(blob.size)})`,
+                });
+            }
+            
             const url = URL.createObjectURL(blob);
             const link = document.createElement('a');
             link.href = url;

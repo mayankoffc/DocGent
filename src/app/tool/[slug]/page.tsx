@@ -8,7 +8,6 @@ import { Dashboard } from '@/components/dashboard';
 import { DocumentGenerator } from '@/components/document-generator';
 import { ResumeGenerator } from '@/components/resume-generator';
 import { DocumentAnalyzer } from '@/components/document-analyzer';
-import { DocumentConverter } from '@/components/document-converter';
 import { ExamPaperGenerator } from '@/components/exam-paper-generator';
 import { ShortNotesGenerator } from '@/components/short-notes-generator';
 import { BookletSolver } from '@/components/booklet-solver';
@@ -34,8 +33,6 @@ export default function ToolPage() {
         return <ResumeGenerator />;
       case 'analyzer':
         return <DocumentAnalyzer />;
-      case 'converter':
-        return <DocumentConverter />;
       case 'handwriting':
         return <HandwritingConverter setSubscriptionModalOpen={setSubscriptionModalOpen}/>;
       case 'exam':
