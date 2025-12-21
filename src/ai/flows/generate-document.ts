@@ -132,6 +132,30 @@ const generateDocumentFlow = ai.defineFlow(
   async (input) => {
     const { marked } = await import('marked');
 
+    // MOCK MODE: Return dummy data if API key is not set to a real value
+    if (process.env.GEMINI_API_KEY === 'dummy_key') {
+        const isPresentation = input.documentType === 'presentation';
+        const dummyPages = [];
+        for (let i = 0; i < input.pageCount; i++) {
+            dummyPages.push({
+                content: `<h1>Page ${i + 1}: ${input.documentType}</h1><p>This is a <strong>mock generated</strong> document because the app is running in preview mode with dummy keys.</p><p>Input Prompt: ${input.prompt}</p><ul><li>Feature 1: Fast generation</li><li>Feature 2: Mock data</li></ul>`,
+                markdownContent: `# Page ${i + 1}: ${input.documentType}\n\nThis is a **mock generated** document...`,
+                imageDataUri: undefined
+            });
+        }
+
+        return {
+            pages: dummyPages,
+            theme: {
+                backgroundColor: isPresentation ? '#111827' : '#ffffff',
+                textColor: isPresentation ? '#F9FAFB' : '#333333',
+                headingColor: isPresentation ? '#60A5FA' : '#111111',
+                backgroundImageDataUri: undefined,
+            },
+            isPresentation: isPresentation,
+        };
+    }
+
     const isPresentation = input.documentType === 'presentation';
     const isTimetable = input.documentType === 'timetable';
 
