@@ -136,6 +136,30 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             const userCredential = await signInWithEmailAndPassword(auth, email, pass);
             return userCredential.user;
         } catch (error) {
+             // Fallback to mock user if in dev mode with dummy keys
+             if (process.env.NEXT_PUBLIC_FIREBASE_API_KEY === 'dummy') {
+                const mockUser = {
+                    uid: 'mock-user-123',
+                    email: email,
+                    displayName: 'Mock User',
+                    emailVerified: true,
+                    isAnonymous: false,
+                    metadata: {},
+                    providerData: [],
+                    refreshToken: '',
+                    tenantId: null,
+                    delete: async () => {},
+                    getIdToken: async () => 'mock-token',
+                    getIdTokenResult: async () => ({ token: 'mock-token', claims: {}, authTime: Date.now(), issuedAtTime: Date.now(), expirationTime: Date.now() + 3600, signInProvider: 'password', signInSecondFactor: null, loading: false }),
+                    reload: async () => {},
+                    toJSON: () => ({}),
+                    phoneNumber: null,
+                    photoURL: null,
+                    providerId: 'firebase',
+                } as unknown as FirebaseUser;
+                setUser(mockUser);
+                return mockUser;
+             }
             throw new Error(handleFirebaseError(error));
         }
     };
