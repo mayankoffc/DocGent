@@ -31,26 +31,29 @@ The app requires Firebase configuration. Add the following environment variables
 ## Development
 The app runs on port 5000 using `npm run dev`.
 
-## Design System - Liquid Glass Effect
+## Design System - Dock Dark Theme
 
-The app uses a comprehensive "liquid glass" UI design system with:
+The app uses a dock-based dark UI design system with:
 
-**Core CSS Properties:**
-- `backdrop-blur: 16-30px` - Glass blur effect
-- `backdrop-saturate: 1.4-1.8` - Color vibrancy enhancement
-- `bg-white/[0.06-0.15]` - Transparent white backgrounds
-- `border-white/[0.15-0.2]` - Subtle white borders
-- Inset shadows for depth: `inset 0 1px 0 rgba(255,255,255,0.2)`
+**Core Colors:**
+- Background: `#060010` (deep dark purple-black)
+- Border: `#222` (subtle dark border)
+- Hover Background: `#0a0015` (slightly lighter)
+- Hover Border: `#333` (slightly lighter border)
 
-**Glass Utility Classes (globals.css):**
-- `.liquid-glass` - Standard glass effect
-- `.liquid-glass-strong` - Enhanced glass with stronger blur
-- `.dark-glass` - Dark variant for overlays
-- `.glass-surface--svg` - SVG filter-based glass
-- `.glass-surface--fallback` - Browser fallback
+**Dock UI Utility Classes (globals.css):**
+- `.dock-outer` - Container for dock elements
+- `.dock-panel` - Fixed bottom navigation panel
+- `.dock-item` - Individual dock buttons with hover effects
+- `.dock-icon` - Icon container within dock items
+- `.dock-label` - Tooltip labels for dock items
+- `.dark-panel` - Main UI container panels
+- `.dark-card` - Content section cards
 
-**Updated Components:**
-Card, Dialog, AlertDialog, Button, Input, Textarea, Select, Dropdown (including nested submenus), Popover, Tabs, Toast, Tooltip, Sheet, Switch, Badge, Alert, Menubar (root, content, subcontent), Sidebar, Header, Dashboard cards, Settings
+**Legacy Classes (for compatibility):**
+- `.liquid-glass` - Now uses dark theme styling
+- `.dark-glass` - Dark variant styling
+- `.glass-card` - Card with dark theme
 
 ## Recent Changes
 - January 17, 2026: Fixed all tools to be 100% functional
@@ -67,12 +70,12 @@ Card, Dialog, AlertDialog, Button, Input, Textarea, Select, Dropdown (including 
   - Simplified help center content with easy-to-understand language
   - Updated all placeholder texts to be more relatable examples
   - Changed technical jargon to simple English across all translations
-- January 17, 2026: Completed comprehensive liquid glass UI implementation across ALL components
-  - Updated 20+ UI components with consistent glass styling
-  - Applied liquid glass to page-level components: Header, Dashboard, Settings, Sidebar
-  - Updated Menubar with full glass styling (root, content, subcontent)
-  - Enhanced Switch, Badge, and Alert components with glass effects
-  - All components now use consistent: backdrop-blur-[16-30px], backdrop-saturate-[1.4-1.8], bg-white/[0.06-0.15], border-white/[0.15-0.2], inset shadows
+- January 17, 2026: Replaced liquid glass UI with dock-based dark theme
+  - Removed all backdrop-blur and glass effects
+  - New dark theme: #060010 background, #222 borders
+  - Added dock UI classes: .dock-panel, .dock-item, .dock-label, .dark-panel, .dark-card
+  - Updated legacy glass classes to use solid dark colors for compatibility
+  - Cleaner, more performant UI without blur effects
 - January 17, 2026: Imported from GitHub and configured for Replit environment
   - Updated Next.js config to allow Replit proxy domains
   - Modified firebase-server.ts to use environment variables instead of JSON file import
