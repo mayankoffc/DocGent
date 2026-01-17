@@ -37,3 +37,13 @@ externalPort = 80
 deploymentTarget = "autoscale"
 run = ["npm", "run", "start", "--", "-p", "5000", "-H", "0.0.0.0"]
 build = ["npm", "run", "build"]
+
+[userenv]
+
+[userenv.shared]
+NEXT_PUBLIC_FIREBASE_API_KEY = "AIzaSyDgN2d4_cbMaMxZtm2LuCF_x53XJMsSlqA"
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN = "doc-ai-beta.firebaseapp.com"
+NEXT_PUBLIC_FIREBASE_PROJECT_ID = "doc-ai-beta"
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET = "doc-ai-beta.firebasestorage.app"
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID = "429958132255"
+NEXT_PUBLIC_FIREBASE_APP_ID = "1:429958132255:web:6a25bc17c0270f1f459b2a"
