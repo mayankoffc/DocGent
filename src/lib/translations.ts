@@ -37,7 +37,6 @@ export const translations = {
         featPrioritySupport: 'Tier-1 Priority Support',
         featEverythingPro: 'Everything in Premium Pro',
         featAdvancedModel: 'L-Series Architectural Models',
-        feat8kUpscale: '8K Visual Pipeline',
         featEarlyAccess: 'Beta Access to Lab Tools',
         featSave40: 'Save over 40% Yearly',
         
@@ -106,7 +105,7 @@ export const translations = {
         helpDesignUtility: '<h5>Design & Visualization</h5>',
         helpToolBlueprint: '<ul><li><strong>Project Blueprint:</strong> Convert abstract ideas into technical plans. Get BOM lists, functional steps, and professional technical diagrams.</li>',
         helpToolResume: '<li><strong>Career Architect:</strong> Draft high-impact resumes tailored to current industry standards and your unique professional history.</li>',
-        helpToolUpscaler: '<li><strong>Visual Optimizer:</strong> Salvage low-resolution assets. Upscale images to 8K clarity with advanced pixel reconstruction.</li></ul>',
+        helpToolUpscaler: '</ul>',
         
         // Subscription Section
         helpSubscriptionPlansTitle: 'Plans & Pricing',
@@ -238,8 +237,6 @@ export const translations = {
         resumeToolDescription: 'Create professional resumes.',
         analyzerToolName: 'Document Analyzer',
         analyzerToolDescription: 'Summarize and analyze documents.',
-        upscalerToolName: 'Image Enhancer',
-        upscalerToolDescription: 'Improve image quality up to 8K.',
         watermarkRemoverToolName: 'Watermark Remover',
         watermarkRemoverToolDescription: 'Remove watermarks from images.',
         watermarkAdderToolName: 'Watermark Adder',
@@ -479,7 +476,6 @@ export const translations = {
         featPrioritySupport: 'टियर-1 प्राथमिकता सहायता',
         featEverythingPro: 'प्रीमियम प्रो में सब कुछ',
         featAdvancedModel: 'एल-सीरीज आर्किटेक्चरल मॉडल',
-        feat8kUpscale: '8K विजुअल पाइपलाइन',
         featEarlyAccess: 'लैब टूल्स तक बीटा एक्सेस',
         featSave40: 'सालाना 40% से अधिक बचाएं',
 
@@ -548,7 +544,7 @@ export const translations = {
         helpDesignUtility: '<h5>डिज़ाइन और उपयोगिता</h5>',
         helpToolBlueprint: '<ul><li><strong>प्रोजेक्ट ब्लूप्रिंट जेनरेटर:</strong> अपनी परियोजना के विचार को एक सामग्री सूची, कार्यात्मक चरणों और एक 2डी तकनीकी एसवीजी आरेख के साथ एक पूर्ण योजना में बदलें।</li>',
         helpToolResume: '<li><strong>बायोडाटा जेनरेटर:</strong> अपने अद्वितीय कौशल और अनुभव के अनुरूप एक पॉलिश, पेशेवर बायोडाटा ड्राफ्ट बनाएं।</li>',
-        helpToolUpscaler: '<li><strong>इमेज अपस्केलर:</strong> शक्तिशाली एआई का उपयोग करके अपनी छवियों के रिज़ॉल्यूशन और गुणवत्ता को 8K तक बढ़ाएं।</li></ul>',
+        helpToolUpscaler: '</ul>',
         
         // Subscription Section
         helpSubscriptionPlansTitle: 'सदस्यता योजनाएं और लाभ',
@@ -684,8 +680,6 @@ export const translations = {
         handwritingToolDescription: 'हस्तलिखित पांडुलिपियों को संरचित डिजिटल संपत्तियों में बदलें।',
         watermarkAdderToolName: 'प्रोटेक्शन इंजन',
         watermarkAdderToolDescription: 'दस्तावेजों को सुरक्षित करें या डिजिटल वॉटरमार्क प्रबंधित करें।',
-        upscalerToolName: 'विजुअल ऑप्टिमाइज़र',
-        upscalerToolDescription: 'छवियों को 8K न्यूरल स्पष्टता तक बढ़ाएं।',
         watermarkRemoverToolName: 'क्लीनिंग इंजन',
         watermarkRemoverToolDescription: 'दस्तावेजों से अवांछित तत्वों को आर्किटेक्चरल शुद्धता के साथ निकालें।',
         converterToolName: 'फॉर्मेट आर्किटेक्ट',
@@ -955,7 +949,7 @@ export const translations = {
         helpDesignUtility: '<h5>Design et Utilitaires</h5>',
         helpToolBlueprint: '<ul><li><strong>Générateur de Plans de Projet :</strong> Transformez votre idée de projet en un plan complet avec une liste de matériaux, des étapes fonctionnelles et un diagramme technique SVG 2D.</li>',
         helpToolResume: '<li><strong>Générateur de CV :</strong> Créez un brouillon de CV soigné et professionnel adapté à vos compétences et votre expérience uniques.</li>',
-        helpToolUpscaler: '<li><strong>Image Upscaler:</strong> Enhance the resolution and quality of your images up to 8K using powerful AI.</li></ul>',
+        helpToolUpscaler: '</ul>',
         
         // Subscription Section
         helpSubscriptionPlansTitle: 'Plans d\'Abonnement et Avantages',
@@ -1087,8 +1081,6 @@ export const translations = {
         resumeToolDescription: 'Créez un brouillon de CV professionnel.',
         analyzerToolName: 'Analyseur',
         analyzerToolDescription: 'Résumez et posez des questions.',
-        upscalerToolName: 'AI Upscaler',
-        upscalerToolDescription: 'Améliorez les images jusqu\'à 8K.',
         watermarkRemoverToolName: 'Suppresseur de Filigrane',
         watermarkRemoverToolDescription: 'Suppression de filigrane par IA.',
         watermarkAdderToolName: 'Ajouteur de Filigrane',

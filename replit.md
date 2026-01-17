@@ -59,7 +59,6 @@ Card, Dialog, AlertDialog, Button, Input, Textarea, Select, Dropdown (including 
   - All dropdown options verified to be connected to actual functionality
   - Watermark Adder: Position, opacity, font size, angle all work properly
   - Exam Paper Generator: Curriculum, language, difficulty all affect output
-  - Image Upscaler: Resolution and HDR effect properly passed to AI
 - January 17, 2026: Made all text content professional and DOCGENTOR-branded
   - Updated app name from "DocGent" to "DOCGENTOR" throughout the app
   - Simplified tool names: Document Generator, Exam Paper Generator, Notes Generator, Resume Builder, etc.
