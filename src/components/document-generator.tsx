@@ -344,13 +344,23 @@ export function DocumentGenerator({ setSubscriptionModalOpen }: DocumentGenerato
                 }
         }
         
-        // Get user's default page size
-        const userPageDimensions = getUserPageDimensions();
+        // Get page size from form values (not localStorage)
+        const formValues = form.getValues();
+        const selectedPageSize = formValues.pageSize || 'A4';
+        
+        // Get proper page dimensions based on form selection
+        const pageSizeDimensions: Record<string, { width: number; height: number }> = {
+            'A4': { width: 595, height: 842 },   // 210 x 297 mm
+            'A3': { width: 842, height: 1191 },  // 297 x 420 mm
+            'A5': { width: 420, height: 595 },   // 148 x 210 mm
+        };
+        
+        const selectedDimensions = pageSizeDimensions[selectedPageSize] || pageSizeDimensions['A4'];
         
         const pdf = new jsPDF({
             orientation: orientation,
-            unit: 'px',
-            format: result.isPresentation ? 'a4' : (localStorage.getItem('defaultPageSize') ? [userPageDimensions.width, userPageDimensions.height] : [pageElements[0].clientWidth, pageElements[0].clientHeight]),
+            unit: 'pt',
+            format: result.isPresentation ? 'a4' : [selectedDimensions.width, selectedDimensions.height],
         });
 
 

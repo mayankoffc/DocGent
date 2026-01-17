@@ -89,6 +89,7 @@ export function getPageSize(size: string = 'A4'): { width: number; height: numbe
   const sizes: Record<string, { width: number; height: number }> = {
     'A4': { width: 595, height: 842 },      // 210 x 297 mm
     'A3': { width: 842, height: 1191 },     // 297 x 420 mm
+    'A5': { width: 420, height: 595 },      // 148 x 210 mm
     'Letter': { width: 612, height: 792 },  // 8.5 x 11 inches
     'Legal': { width: 612, height: 1008 },  // 8.5 x 14 inches
   };
