@@ -41,13 +41,13 @@ const DialogContent = React.forwardRef<
       <DialogPrimitive.Content
         ref={ref}
         className={cn(
-          "pointer-events-auto relative grid w-full max-w-lg gap-4 bg-[#0a0a0a] p-6 duration-300 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 sm:rounded-[2rem] toast-gradient-border shadow-[0_0_100px_rgba(0,0,0,0.9)]",
+          "pointer-events-auto relative grid w-full max-w-lg gap-4 p-6 duration-300 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 sm:rounded-[2rem] bg-white/[0.1] backdrop-blur-[30px] backdrop-saturate-[180%] border border-white/[0.2] shadow-[0_8px_32px_rgba(31,38,135,0.2),0_2px_16px_rgba(31,38,135,0.1),inset_0_1px_0_rgba(255,255,255,0.3),inset_0_-1px_0_rgba(255,255,255,0.15)] toast-gradient-border",
           className
         )}
         {...props}
       >
         {children}
-        <DialogPrimitive.Close className="absolute right-6 top-6 rounded-full p-2 opacity-70 ring-offset-background transition-all hover:opacity-100 hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-primary/50 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground z-[1001]">
+        <DialogPrimitive.Close className="absolute right-6 top-6 rounded-full p-2 opacity-70 ring-offset-background transition-all hover:opacity-100 hover:bg-white/15 focus:outline-none focus:ring-2 focus:ring-primary/50 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground z-[1001]">
           <X className="h-5 w-5" />
           <span className="sr-only">Close</span>
         </DialogPrimitive.Close>

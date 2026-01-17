@@ -9,16 +9,16 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground hover:bg-primary/90 shadow-[0_0_20px_hsl(var(--primary)/0.3)] hover:shadow-[0_0_30px_hsl(var(--primary)/0.5)] hover:scale-[1.02]",
+        default: "bg-primary text-primary-foreground hover:bg-primary/90 shadow-[0_0_20px_hsl(var(--primary)/0.3),inset_0_1px_0_rgba(255,255,255,0.2)] hover:shadow-[0_0_30px_hsl(var(--primary)/0.5),inset_0_1px_0_rgba(255,255,255,0.3)] hover:scale-[1.02]",
         destructive:
-          "bg-destructive text-destructive-foreground hover:bg-destructive/90 shadow-[0_0_20px_hsl(var(--destructive)/0.3)]",
+          "bg-destructive text-destructive-foreground hover:bg-destructive/90 shadow-[0_0_20px_hsl(var(--destructive)/0.3),inset_0_1px_0_rgba(255,255,255,0.15)]",
         outline:
-          "border border-white/10 bg-white/[0.05] backdrop-blur-md hover:bg-white/[0.1] hover:border-white/20 text-foreground",
+          "border border-white/[0.15] bg-white/[0.08] backdrop-blur-[16px] backdrop-saturate-[1.6] hover:bg-white/[0.15] hover:border-white/[0.25] text-foreground shadow-[inset_0_1px_0_rgba(255,255,255,0.15),inset_0_-1px_0_rgba(255,255,255,0.05)]",
         secondary:
-          "bg-secondary/20 text-secondary-foreground hover:bg-secondary/30 border border-secondary/30 backdrop-blur-md",
-        ghost: "hover:bg-white/[0.08] hover:text-accent-foreground backdrop-blur-sm",
+          "bg-secondary/20 text-secondary-foreground hover:bg-secondary/30 border border-secondary/30 backdrop-blur-[16px] shadow-[inset_0_1px_0_rgba(255,255,255,0.1)]",
+        ghost: "hover:bg-white/[0.1] hover:text-accent-foreground backdrop-blur-[8px] hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.1)]",
         link: "text-primary underline-offset-4 hover:underline",
-        glass: "bg-white/[0.06] backdrop-blur-xl border border-white/10 hover:bg-white/[0.12] hover:border-white/20 shadow-[0_4px_20px_rgba(0,0,0,0.3)]",
+        glass: "bg-white/[0.08] backdrop-blur-[20px] backdrop-saturate-[1.6] border border-white/[0.15] hover:bg-white/[0.15] hover:border-white/[0.25] shadow-[0_8px_32px_rgba(0,0,0,0.2),inset_0_1px_0_rgba(255,255,255,0.2),inset_0_-1px_0_rgba(255,255,255,0.1)] hover:shadow-[0_12px_40px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.3)]",
       },
       size: {
         default: "h-10 px-4 py-2",
