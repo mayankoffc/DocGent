@@ -42,6 +42,5 @@ next-env.d.ts
 
 # firebase
 firebase-debug.log
-firestore-debug.logsrc/lib/firebase-service-account.json
-src/lib/firebase-service-account.json
+firestore-debug.log
 src/lib/firebase-service-account.json
