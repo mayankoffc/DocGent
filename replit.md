@@ -31,7 +31,31 @@ The app requires Firebase configuration. Add the following environment variables
 ## Development
 The app runs on port 5000 using `npm run dev`.
 
+## Design System - Liquid Glass Effect
+
+The app uses a comprehensive "liquid glass" UI design system with:
+
+**Core CSS Properties:**
+- `backdrop-blur: 16-30px` - Glass blur effect
+- `backdrop-saturate: 1.4-1.8` - Color vibrancy enhancement
+- `bg-white/[0.06-0.15]` - Transparent white backgrounds
+- `border-white/[0.15-0.2]` - Subtle white borders
+- Inset shadows for depth: `inset 0 1px 0 rgba(255,255,255,0.2)`
+
+**Glass Utility Classes (globals.css):**
+- `.liquid-glass` - Standard glass effect
+- `.liquid-glass-strong` - Enhanced glass with stronger blur
+- `.dark-glass` - Dark variant for overlays
+- `.glass-surface--svg` - SVG filter-based glass
+- `.glass-surface--fallback` - Browser fallback
+
+**Updated Components:**
+Card, Dialog, AlertDialog, Button, Input, Textarea, Select, Dropdown, Popover, Tabs, Toast, Tooltip, Sheet
+
 ## Recent Changes
+- January 17, 2026: Implemented liquid glass UI effect system across all major components
+  - Added glass utility classes to globals.css
+  - Updated 14+ UI components with consistent glass styling
 - January 17, 2026: Imported from GitHub and configured for Replit environment
   - Updated Next.js config to allow Replit proxy domains
   - Modified firebase-server.ts to use environment variables instead of JSON file import
