@@ -553,7 +553,7 @@ export function DocumentGenerator({ setSubscriptionModalOpen }: DocumentGenerato
                 variant: "destructive",
                 title: "Authentication Error",
                 description: "Could not get Google access token. Please sign in again.",
-                action: <Button onClick={signIn}>Sign In</Button>
+                action: <Button onClick={() => signIn('', '')}>Sign In</Button>
             });
             return;
         }

@@ -37,13 +37,7 @@ Document Content:
 {{documentContent}}
 
 User Question:
-{{userQuestion}}
-
-Summary:
-{{summary}}
-
-Answer:
-{{answer}}`,
+{{userQuestion}}`,
 });
 
 const analyzeDocumentFlow = ai.defineFlow(
@@ -53,11 +47,7 @@ const analyzeDocumentFlow = ai.defineFlow(
     outputSchema: AnalyzeDocumentOutputSchema,
   },
   async input => {
-    const {output} = await prompt({
-      ...input,
-      summary: '',
-      answer: '',
-    });
+    const {output} = await prompt(input);
     return output!;
   }
 );

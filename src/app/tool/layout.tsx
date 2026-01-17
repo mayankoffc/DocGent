@@ -37,6 +37,8 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Separator } from '@/components/ui/separator';
 import { Logo } from '@/components/icons';
+import { AppHeader } from '@/components/header';
+import { AiAssistant } from '@/components/ai-assistant';
 import { useAuth } from '@/hooks/use-auth';
 import { Button } from '@/components/ui/button';
 import { SubscriptionModal } from '@/components/subscription-modal';

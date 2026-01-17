@@ -145,7 +145,6 @@ export function WatermarkAdder({ setSubscriptionModalOpen }: { setSubscriptionMo
                 fontSize: values.fontSize,
                 angle: values.angle,
                 logoScale: values.logoScale / 100, // Convert percentage to 0-1 scale
-                compressionLevel: 'none', // Hardcode to 'none' as feature is coming soon
             };
             
             const output = await addWatermark(input);

@@ -13,8 +13,10 @@ import { ProfessionalDocumentEditorOutput } from '@/ai/flows/professional-docume
 import { AnalyzeDocumentOutput } from '@/ai/flows/analyze-document';
 import { AnyRecentGeneration } from './use-recent-generations';
 import { AddWatermarkOutput } from '@/ai/flows/add-watermark';
+import { HandwritingConverterOutput } from '@/ai/flows/handwriting-converter';
+import { ConvertDocumentOutput } from '@/ai/flows/convert-document';
 
-export type Tool = 'dashboard' | 'docs' | 'resume' | 'analyzer' | 'settings' | 'upscaler' | 'storage' | 'exam' | 'notes' | 'solver' | 'blueprint' | 'editor' | 'watermark-adder';
+export type Tool = 'dashboard' | 'docs' | 'resume' | 'analyzer' | 'settings' | 'upscaler' | 'storage' | 'exam' | 'notes' | 'solver' | 'blueprint' | 'editor' | 'watermark-adder' | 'converter' | 'handwriting';
 
 // A mapped type to hold the state for each tool
 export type AllToolStates = {
@@ -28,6 +30,8 @@ export type AllToolStates = {
     blueprint: GenerateProjectBlueprintOutput;
     editor: ProfessionalDocumentEditorOutput;
     'watermark-adder': AddWatermarkOutput;
+    converter: ConvertDocumentOutput;
+    handwriting: HandwritingConverterOutput;
 };
 
 // This type maps a tool name to its expected data type
@@ -71,7 +75,15 @@ export const ToolStateProvider = ({ children }: { children: ReactNode }) => {
     );
 };
 
-export const useToolState = <T,>(tool: keyof ToolStateMap | null) => {
+export function useToolState(tool: null): {
+    getToolState: () => null;
+    setToolState: <T extends keyof ToolStateMap>(tool: T, state: ToolStateMap[T] | null) => void;
+};
+export function useToolState<T>(tool: keyof ToolStateMap): {
+    getToolState: () => T | null;
+    setToolState: (state: T | null) => void;
+};
+export function useToolState<T>(tool: keyof ToolStateMap | null) {
     const context = useContext(ToolStateContext);
     if (context === undefined) {
         throw new Error('useToolState must be used within a ToolStateProvider');
@@ -89,4 +101,4 @@ export const useToolState = <T,>(tool: keyof ToolStateMap | null) => {
         getToolState: (): T | null => context.getToolState(tool) as T | null,
         setToolState: (state: T | null) => context.setToolState(tool, state),
     };
-};
+}

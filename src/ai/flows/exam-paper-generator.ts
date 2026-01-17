@@ -76,11 +76,7 @@ const textGenerationPrompt = ai.definePrompt({
     isNcert: z.boolean(),
     isNios: z.boolean(),
   })},
-  output: {schema: z.object({
-    examPaperContent: GenerateExamPaperOutputSchema.shape.examPaperContent,
-    answerKeyContent: GenerateExamPaperOutputSchema.shape.answerKeyContent,
-    blueprintContent: GenerateExamPaperOutputSchema.shape.blueprintContent,
-  })},
+  output: {schema: GenerateExamPaperOutputSchema},
   prompt: `Exam Paper Generator. Use validateExamMarks tool FIRST to validate marks sum={{{totalMarks}}}.
 
 **Specs:** Title={{{examTitle}}}, Std={{{standard}}}, Sub={{{subject}}}, Lang={{{language}}}, Curriculum={{{curriculum}}}, Difficulty={{{difficulty}}}, Time={{{timeAllotted}}}, Marks={{{totalMarks}}}
@@ -126,22 +122,16 @@ const generateExamPaperFlow = ai.defineFlow(
         isNios: input.curriculum === 'nios',
     });
     
-    // After calling the prompt, check if the tool call was successful and handled.
-    // The prompt instructs the model to stop if validation fails, which can result in empty content.
-    if (!llmResponse.output?.examPaperContent) {
-        const toolRequest = llmResponse.references?.[0]?.part.toolRequest;
-        if(toolRequest?.name === 'validateExamMarks' && toolRequest?.output === false) {
-             throw new Error(
-                'AI failed to create a valid question paper structure. The sum of marks for the generated questions did not match the total marks requested. Please check your "Total Marks" or try again.'
-            );
-        }
+    const output = llmResponse.output;
+
+    if (!output?.examPaperContent) {
       throw new Error('Failed to generate exam paper content. The AI model did not return the expected output.');
     }
 
     return {
-        examPaperContent: llmResponse.output.examPaperContent,
-        answerKeyContent: llmResponse.output.answerKeyContent,
-        blueprintContent: llmResponse.output.blueprintContent,
+        examPaperContent: output.examPaperContent,
+        answerKeyContent: output.answerKeyContent,
+        blueprintContent: output.blueprintContent,
     };
   }
 );

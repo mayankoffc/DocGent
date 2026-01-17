@@ -3,7 +3,7 @@
 
 import { createContext, useContext, useState, ReactNode, useEffect, useCallback } from 'react';
 import { useAuth } from './use-auth';
-import { useToast } from './use-toast';
+import { useToast } from '@/hooks/use-toast';
 import { CheckCircle } from 'lucide-react';
 import { getAppSettings } from '@/ai/flows/get-app-settings';
 import { getUserData } from '@/ai/flows/user-data';

@@ -11,8 +11,8 @@ let projectId: string | undefined;
 try {
     const serviceAccount = serviceAccountJson as ServiceAccount;
 
-    if (serviceAccount && serviceAccount.project_id) {
-        projectId = serviceAccount.project_id;
+    if (serviceAccount && (serviceAccount as any).project_id) {
+        projectId = (serviceAccount as any).project_id;
         if (!getApps().length) {
             adminApp = initializeApp({
                 credential: cert(serviceAccount)

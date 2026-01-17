@@ -19,13 +19,14 @@ let auth: Auth;
 let storage: FirebaseStorage;
 
 // A robust check to ensure all necessary keys are present.
-const isFirebaseConfigured =
+const isFirebaseConfigured = !!(
   firebaseConfig.apiKey &&
   firebaseConfig.authDomain &&
   firebaseConfig.projectId &&
   firebaseConfig.storageBucket &&
   firebaseConfig.messagingSenderId &&
-  firebaseConfig.appId;
+  firebaseConfig.appId
+);
 
 if (isFirebaseConfigured) {
     app = getApps().length ? getApp() : initializeApp(firebaseConfig);

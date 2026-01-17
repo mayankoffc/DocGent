@@ -14,14 +14,7 @@ if (!gcpProjectId) {
 
 export const ai = genkit({
   plugins: [
-    googleAI({
-      // Switch from the free-tier Gemini API to the enterprise-grade Vertex AI API.
-      // This will use your Google Cloud project's billing and provide much higher rate limits.
-      apiClient: 'vertex',
-      location: 'us-central1',
-      // Explicitly tell Genkit which project to use for billing.
-      project: gcpProjectId,
-    }),
+    googleAI(),
   ],
   // By setting a default model here, all flows that don't specify a model
   // will use this reliable and fast text generation model.

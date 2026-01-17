@@ -19,21 +19,25 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useAuth } from "@/hooks/use-auth";
-import { Menu, UserCircle, HelpCircle, Bot, Info, Settings, LogIn, ArrowLeft, LogOut, MessageSquareMore, Gem } from "lucide-react";
+import { Menu, UserCircle, HelpCircle, Bot, Info, Settings, LogIn, ArrowLeft, LogOut, MessageSquareMore, Gem, Crown } from "lucide-react";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "./ui/accordion";
 import { ScrollArea } from "./ui/scroll-area";
 import { useTranslation } from "@/hooks/use-translation";
 import { useRouter } from "next/navigation";
 import Link from 'next/link';
+import { useSubscription } from "@/hooks/use-subscription";
 
 interface AppHeaderProps {
-  activeTool: string;
+  activeTool?: string;
 }
 
-export function AppHeader({ activeTool }: AppHeaderProps) {
+export function AppHeader({ activeTool = "" }: AppHeaderProps) {
   const { user, signOut } = useAuth();
   const { t } = useTranslation();
   const router = useRouter();
+  const { subscription } = useSubscription();
+
+  const isPremium = subscription.status === 'active' || subscription.status === 'trial';
 
   return (
     <header className="sticky top-0 z-10 flex h-16 items-center justify-between gap-4 border-b border-white/[0.06] bg-[rgba(10,10,10,0.8)] px-4 backdrop-blur-xl sm:px-6">
@@ -90,12 +94,20 @@ export function AppHeader({ activeTool }: AppHeaderProps) {
         </SheetContent>
       </Sheet>
       
-      <div className="flex-1">
+      <div className="flex-1 flex items-center gap-4">
         {activeTool !== 'dashboard' && (
              <Link href="/tool/dashboard" passHref>
                 <Button variant="ghost">
                     <ArrowLeft className="mr-2 h-4 w-4" />
                     {t('backButton')}
+                </Button>
+            </Link>
+        )}
+        {!isPremium && (
+            <Link href="/upgrade" passHref>
+                <Button variant="outline" size="sm" className="hidden md:flex border-amber-500/50 bg-amber-500/10 text-amber-500 hover:bg-amber-500/20 gap-2">
+                    <Crown className="h-4 w-4" />
+                    Upgrade to Premium
                 </Button>
             </Link>
         )}

@@ -427,7 +427,7 @@ export function ExamPaperGenerator({ setSubscriptionModalOpen }: any) {
                 variant: "destructive",
                 title: "Login Required",
                 description: "You must be signed in to save documents to the cloud.",
-                action: <Button onClick={signIn}>Sign In</Button>
+                action: <Button onClick={() => signIn('', '')}>Sign In</Button>
             });
             return;
         }
@@ -438,7 +438,7 @@ export function ExamPaperGenerator({ setSubscriptionModalOpen }: any) {
                 variant: "destructive",
                 title: "Authentication Error",
                 description: "Could not get Google access token. Please sign in again.",
-                action: <Button onClick={signIn}>Sign In</Button>
+                action: <Button onClick={() => signIn('', '')}>Sign In</Button>
             });
             return;
         }

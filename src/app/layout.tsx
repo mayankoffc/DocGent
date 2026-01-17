@@ -11,6 +11,7 @@ import { Loader2 } from 'lucide-react';
 import { Inter as FontSans } from "next/font/google"
 import { cn } from "@/lib/utils"
 import { ThemeProvider } from '@/hooks/use-theme';
+import { AuroraBackground } from '@/components/aurora-background';
 
 // This needs to be imported here to be available globally for the animation
 import '@/components/writing-animation.css';
@@ -44,14 +45,45 @@ export default function RootLayout({
               document.documentElement.classList.add(theme);
               
               // Apply custom theme if exists
-              const customTheme = localStorage.getItem('customTheme');
+              const customTheme = localStorage.getItem('anm-theme') || localStorage.getItem('customTheme');
               if (customTheme) {
                 try {
                   const themeData = JSON.parse(customTheme);
                   const root = document.documentElement;
+                  
+                  const hexToHsl = (hex) => {
+                    hex = hex.replace('#', '');
+                    if (hex.length === 3) hex = hex.split('').map(c => c + c).join('');
+                    const r = parseInt(hex.substring(0, 2), 16) / 255;
+                    const g = parseInt(hex.substring(2, 4), 16) / 255;
+                    const b = parseInt(hex.substring(4, 6), 16) / 255;
+                    const max = Math.max(r, g, b), min = Math.min(r, g, b);
+                    let h = 0, s = 0, l = (max + min) / 2;
+                    if (max !== min) {
+                      const d = max - min;
+                      s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+                      switch (max) {
+                        case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+                        case g: h = (b - r) / d + 2; break;
+                        case b: h = (r - g) / d + 4; break;
+                      }
+                      h /= 6;
+                    }
+                    return Math.round(h * 360) + ' ' + Math.round(s * 100) + '% ' + Math.round(l * 100) + '%';
+                  };
+
                   Object.entries(themeData.colors || {}).forEach(([key, value]) => {
-                    root.style.setProperty('--' + key, value);
+                    if (typeof value === 'string' && value.startsWith('#')) {
+                      root.style.setProperty('--' + key, hexToHsl(value));
+                    } else {
+                      root.style.setProperty('--' + key, value);
+                    }
                   });
+
+                  // Apply background style if it exists
+                  if (themeData.colors && themeData.colors.backgroundStyle) {
+                    root.style.setProperty('--background-style', themeData.colors.backgroundStyle);
+                  }
                 } catch(e) {}
               }
             })();
@@ -59,16 +91,13 @@ export default function RootLayout({
         }} />
       </head>
       <body className={cn(
-          "min-h-screen bg-[#0a0a0a] font-sans antialiased",
+          "min-h-screen font-sans antialiased",
           fontSans.variable
         )}
-        style={{
-          background: 'linear-gradient(135deg, #0a0a0a 0%, #111111 50%, #0d0d0d 100%)',
-          backgroundAttachment: 'fixed'
-        }}
       >
         <TranslationProvider>
           <ThemeProvider>
+            <AuroraBackground />
             <AuthProvider>
               <SubscriptionProvider>
                 <RecentGenerationsProvider>

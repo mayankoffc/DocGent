@@ -219,7 +219,7 @@ export function ShortNotesGenerator({ setSubscriptionModalOpen }: any) {
                 variant: "destructive",
                 title: t('toastLoginRequiredTitle'),
                 description: t('toastLoginRequiredDescription'),
-                action: <Button onClick={signIn}>Sign In</Button>
+                action: <Button onClick={() => signIn('', '')}>Sign In</Button>
             });
             return;
         }
@@ -230,7 +230,7 @@ export function ShortNotesGenerator({ setSubscriptionModalOpen }: any) {
                 variant: "destructive",
                 title: "Authentication Error",
                 description: "Could not get Google access token. Please sign in again.",
-                action: <Button onClick={signIn}>Sign In</Button>
+                action: <Button onClick={() => signIn('', '')}>Sign In</Button>
             });
             return;
         }
@@ -246,8 +246,8 @@ export function ShortNotesGenerator({ setSubscriptionModalOpen }: any) {
             if (!blob) {
                  throw new Error("Failed to generate PDF blob for upload.");
             }
-            const fileName = `Short_Notes_${fileName || 'Document'}_${new Date().toISOString()}.pdf`;
-            const driveFile = await uploadToGoogleDrive(accessToken, fileName, blob, "application/pdf");
+            const generatedFileName = `Short_Notes_${new Date().toISOString()}.pdf`;
+            const driveFile = await uploadToGoogleDrive(accessToken, generatedFileName, blob, "application/pdf");
 
             toast({
                 title: t('toastCloudSuccessTitle'),

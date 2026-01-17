@@ -4,7 +4,7 @@
 import { createContext, useContext, useEffect, useState, ReactNode, useCallback } from 'react';
 import { onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut as firebaseSignOut, type User as FirebaseUser, GoogleAuthProvider, signInWithPopup, updateProfile } from 'firebase/auth';
 import { auth, isFirebaseConfigured } from '@/lib/firebase';
-import { useToast } from './use-toast';
+import { useToast } from '@/hooks/use-toast';
 import { Loader2, Eye, EyeOff, ChevronDown } from "lucide-react";
 import { Button } from '@/components/ui/button';
 import { useTranslation } from './use-translation';
@@ -56,10 +56,10 @@ const handleFirebaseError = (error: any): string => {
          return "The password reset link is invalid or has expired. Please try again.";
       default:
         console.error("Firebase Auth Error:", error);
-        return "An unexpected error occurred. Please try again later.";
+        return `Error (${error.code || 'unknown'}): ${error.message || 'An unexpected error occurred.'}`;
     }
   }
-  return "An unexpected error occurred. Please try again later.";
+  return error.message || "An unexpected error occurred. Please try again later.";
 }
 
 const createUserDataInFirestore = async (user: FirebaseUser) => {

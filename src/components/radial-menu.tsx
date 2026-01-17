@@ -39,8 +39,8 @@ export function RadialMenu({ tools }: RadialMenuProps) {
                 className="absolute w-[460px] h-[460px] rounded-full animate-radial-spin [animation-duration:120s] pointer-events-none"
                 style={{
                     background: 'transparent',
-                    border: '1px solid rgba(139, 92, 246, 0.15)',
-                    boxShadow: '0 0 40px rgba(139, 92, 246, 0.08)',
+                    border: '1px solid hsl(var(--primary) / 0.15)',
+                    boxShadow: '0 0 40px hsl(var(--primary) / 0.08)',
                 }}
             />
             
@@ -49,8 +49,8 @@ export function RadialMenu({ tools }: RadialMenuProps) {
                 className="absolute w-[380px] h-[380px] rounded-full animate-spin-reverse [animation-duration:90s] pointer-events-none"
                 style={{
                     background: 'transparent',
-                    border: '1px solid rgba(6, 182, 212, 0.12)',
-                    boxShadow: '0 0 30px rgba(6, 182, 212, 0.06)',
+                    border: '1px solid hsl(var(--secondary) / 0.15)',
+                    boxShadow: '0 0 30px hsl(var(--secondary) / 0.05)',
                 }}
             />
 
@@ -101,11 +101,11 @@ export function RadialMenu({ tools }: RadialMenuProps) {
             <div 
                 className="absolute w-20 h-20 rounded-full flex items-center justify-center group cursor-pointer z-20"
                 style={{
-                    background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.2) 0%, rgba(6, 182, 212, 0.15) 50%, rgba(244, 114, 182, 0.2) 100%)',
+                    background: 'linear-gradient(135deg, hsl(var(--primary) / 0.2) 0%, hsl(var(--secondary) / 0.15) 50%, hsl(var(--accent) / 0.2) 100%)',
                     backdropFilter: 'blur(16px)',
                     WebkitBackdropFilter: 'blur(16px)',
                     border: '1px solid rgba(255, 255, 255, 0.15)',
-                    boxShadow: '0 8px 32px rgba(139, 92, 246, 0.25), inset 0 2px 4px rgba(255, 255, 255, 0.1), 0 0 40px rgba(139, 92, 246, 0.15)',
+                    boxShadow: '0 8px 32px hsl(var(--primary) / 0.25), inset 0 2px 4px rgba(255, 255, 255, 0.1), 0 0 40px hsl(var(--primary) / 0.15)',
                 }}
                 onClick={() => router.push('/tool/dashboard')}
             >
@@ -116,7 +116,7 @@ export function RadialMenu({ tools }: RadialMenuProps) {
                         background: 'radial-gradient(circle at 30% 25%, rgba(255, 255, 255, 0.25), transparent 50%)',
                     }}
                 />
-                <Sparkles className="w-8 h-8 text-primary drop-shadow-[0_0_12px_rgba(139,92,246,0.9)] transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12" />
+                <Sparkles className="w-8 h-8 text-primary drop-shadow-[0_0_12px_hsl(var(--primary)/0.9)] transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12" />
             </div>
         </div>
     );

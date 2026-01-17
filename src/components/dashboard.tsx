@@ -59,7 +59,7 @@ export function Dashboard() {
     const isFreemiumUser = subscription.status === 'freemium';
 
     const handleViewGeneration = (item: AnyRecentGeneration) => {
-        setToolState(item.type, item.data);
+        (setToolState as any)(item.type, item.data);
         router.push(`/tool/${item.type}`);
     };
 
@@ -122,7 +122,7 @@ export function Dashboard() {
                     {recentGenerations.length > 3 && (
                         <div className="mt-4 text-center">
                             <Button variant="ghost" onClick={() => setShowAllGenerations(!showAllGenerations)}>
-                                {showAllGenerations ? 'Show Less' : 'Show All'}
+                                {showAllGenerations ? t('showLess') : t('showAll')}
                                 <ChevronDown className={cn("w-4 h-4 ml-2 transition-transform", showAllGenerations && "rotate-180")} />
                             </Button>
                         </div>
@@ -143,27 +143,27 @@ export function Dashboard() {
                           <Card className="group cursor-pointer transition-all duration-300 hover:-translate-y-1 relative h-full bg-[rgba(20,20,20,0.6)] backdrop-blur-xl border-white/[0.08] hover:bg-[rgba(30,30,30,0.7)] hover:border-white/[0.12]">
                               {isPremium && (
                                 isPremiumUser ? (
-                                    <Badge variant="secondary" className="badge-glossy animate-shine absolute -top-2 -right-2 bg-gradient-to-br from-green-500 to-emerald-600 text-white border-none shadow-md">
+                                    <Badge variant="secondary" className="badge-glossy absolute -top-2 -right-2 bg-gradient-to-br from-green-500 to-emerald-600 text-white border-none shadow-md z-10">
                                         <CheckCircle className="w-3 h-3 mr-1"/>
-                                        Unlocked
+                                        {t('unlocked')}
                                     </Badge>
                                 ) : (
-                                    <Badge variant="secondary" className="badge-glossy animate-shine absolute -top-2 -right-2 bg-gradient-to-br from-yellow-400 to-orange-500 text-white border-none shadow-md">
+                                    <Badge variant="secondary" className="badge-glossy absolute -top-2 -right-2 bg-gradient-to-br from-yellow-400 to-orange-500 text-white border-none shadow-md z-10">
                                         <Crown className="w-3 h-3 mr-1"/>
-                                        Premium
+                                        {t('premium')}
                                     </Badge>
                                 )
                             )}
                              {isFreemium && !isPremium && (
                                 hasFreemiumAccess ? (
-                                    <Badge variant="secondary" className="badge-glossy animate-shine absolute -top-2 -right-2 bg-gradient-to-br from-green-500 to-emerald-600 text-white border-none shadow-md">
+                                    <Badge variant="secondary" className="badge-glossy absolute -top-2 -right-2 bg-gradient-to-br from-green-500 to-emerald-600 text-white border-none shadow-md z-10">
                                         <CheckCircle className="w-3 h-3 mr-1"/>
-                                        Unlocked
+                                        {t('unlocked')}
                                     </Badge>
                                 ) : (
-                                    <Badge variant="secondary" className="badge-glossy animate-shine absolute -top-2 -right-2 bg-gradient-to-br from-blue-500 to-cyan-600 text-white border-none shadow-md">
+                                    <Badge variant="secondary" className="badge-glossy absolute -top-2 -right-2 bg-gradient-to-br from-blue-500 to-cyan-600 text-white border-none shadow-md z-10">
                                         <Crown className="w-3 h-3 mr-1"/>
-                                        Freemium
+                                        {t('freemium')}
                                     </Badge>
                                 )
                             )}

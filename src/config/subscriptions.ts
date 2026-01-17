@@ -1,5 +1,5 @@
 
-export type Tool = 'dashboard' | 'docs' | 'resume' | 'analyzer' | 'settings' | 'upscaler' | 'storage' | 'exam' | 'notes' | 'solver' | 'blueprint' | 'editor' | 'ai-assistant' | 'watermark-adder' | 'watermark-adder-compression' | 'upscaler-4k' | 'upscaler-6k' | 'upscaler-8k';
+export type Tool = 'dashboard' | 'docs' | 'resume' | 'analyzer' | 'settings' | 'upscaler' | 'storage' | 'exam' | 'notes' | 'solver' | 'blueprint' | 'editor' | 'ai-assistant' | 'watermark-adder' | 'watermark-adder-compression' | 'upscaler-4k' | 'upscaler-6k' | 'upscaler-8k' | 'handwriting';
 
 // Define which tools are considered premium
 export const premiumTools: Tool[] = [
@@ -31,7 +31,7 @@ export function isPremiumTool(tool: Tool): boolean {
 export const प्लांस = {
     monthly: {
         id: 'plan_monthly',
-        name: 'Monthly',
+        name: 'Premium Pro',
         price: 200,
         discountedPrice: 29, // Default price
         features: [
@@ -43,7 +43,7 @@ export const प्लांस = {
     },
     yearly: {
         id: 'plan_yearly',
-        name: 'Yearly',
+        name: 'Premium Ultra',
         price: 2400,
         discountedPrice: 199, // Default price
         features: [

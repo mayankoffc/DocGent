@@ -4,7 +4,7 @@
 import { createContext, useContext, useState, ReactNode, useCallback, useEffect } from 'react';
 import { translations, TranslationKey, translate as translateText } from '@/lib/translations';
 
-type Language = 'en' | 'hi' | 'es' | 'fr';
+type Language = 'en' | 'hi' | 'fr';
 
 interface TranslationContextType {
     language: Language;

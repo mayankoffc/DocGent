@@ -376,7 +376,7 @@ export function BookletSolver({ setSubscriptionModalOpen }: any) {
                 variant: "destructive",
                 title: t('toastLoginRequiredTitle'),
                 description: t('toastLoginRequiredDescription'),
-                action: <Button onClick={signIn}>Sign In</Button>
+                action: <Button onClick={() => signIn('', '')}>Sign In</Button>
             });
             return;
         }
@@ -387,7 +387,7 @@ export function BookletSolver({ setSubscriptionModalOpen }: any) {
                 variant: "destructive",
                 title: "Authentication Error",
                 description: "Could not get Google access token. Please sign in again.",
-                action: <Button onClick={signIn}>Sign In</Button>
+                action: <Button onClick={() => signIn('', '')}>Sign In</Button>
             });
             return;
         }

@@ -12,8 +12,9 @@ import type { GenerateProjectBlueprintOutput, GenerateProjectBlueprintInput } fr
 import type { ProfessionalDocumentEditorOutput, ProfessionalDocumentEditorInput } from "@/ai/flows/professional-document-editor";
 import type { GenerateResumeOutput, GenerateResumeInput } from "@/ai/flows/generate-resume";
 import type { AnalyzeDocumentOutput, AnalyzeDocumentInput } from "@/ai/flows/analyze-document";
-import type { AddWatermarkOutput, AddWatermarkInput } from "@/ai/flows/add-watermark";
+import { AddWatermarkOutput, AddWatermarkInput } from "@/ai/flows/add-watermark";
 import { HandwritingConverterOutput, HandwritingConverterInput } from '@/ai/flows/handwriting-converter';
+import { ConvertDocumentOutput, ConvertDocumentInput } from '@/ai/flows/convert-document';
 
 
 const MAX_RECENT_ITEMS = 8;

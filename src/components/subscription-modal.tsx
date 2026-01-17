@@ -17,7 +17,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { ArrowRight, CheckCircle, Code, Crown, Loader2, Star } from "lucide-react";
+import { ArrowRight, CheckCircle, Code, Crown, Loader2, Star, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useState, useEffect } from "react";
 import { useAuth } from "@/hooks/use-auth";
@@ -26,9 +26,11 @@ import { प्लांस as defaultPlans, RAZORPAY_KEY_ID } from "@/config/su
 import { useToast } from "@/hooks/use-toast";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
+import { Badge } from "@/components/ui/badge";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import Link from 'next/link';
 import { getAppSettings } from "@/ai/flows/get-app-settings";
+import { useTranslation } from "@/hooks/use-translation";
 
 interface SubscriptionModalProps {
   isOpen: boolean;
@@ -43,6 +45,7 @@ declare global {
 
 export function SubscriptionModal({ isOpen, onOpenChange }: SubscriptionModalProps) {
   const { user } = useAuth();
+  const { t } = useTranslation();
   const { subscription, subscribe } = useSubscription();
   const [selectedPlan, setSelectedPlan] = useState<'monthly' | 'yearly'>('yearly');
   const [isLoading, setIsLoading] = useState<null | 'monthly' | 'yearly' | 'freemium'>(null);
@@ -241,88 +244,154 @@ export function SubscriptionModal({ isOpen, onOpenChange }: SubscriptionModalPro
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-4xl p-0">
-        <Tabs defaultValue="premium" className="w-full">
-            <DialogHeader className="p-6 pb-4">
-                <DialogTitle className="text-center text-3xl font-bold flex items-center justify-center gap-2">
-                    <Crown className="text-yellow-400" /> Unlock Premium
+      <DialogContent 
+        className="max-w-5xl p-0 bg-[#0a0a0a] shadow-[0_0_100px_rgba(0,0,0,0.8)] overflow-hidden"
+        wrapperClassName="animate-float-modal"
+      >
+        <div className="w-full h-full">
+          <Tabs defaultValue="premium" className="w-full">
+            <DialogHeader className="p-8 pb-6 relative overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-b from-primary/10 to-transparent pointer-events-none" />
+                <DialogTitle className="text-center text-4xl font-black flex items-center justify-center gap-3 tracking-tighter">
+                    <Crown className="text-amber-400 w-10 h-10" /> 
+                    <span className="bg-clip-text text-transparent bg-gradient-to-r from-white to-white/60 uppercase">{t('upgradeToUltra')}</span>
                 </DialogTitle>
-                <DialogDescription className="text-center text-md text-muted-foreground">
-                    Choose a plan or enter a special code to access more features.
+                <DialogDescription className="text-center text-lg text-muted-foreground mt-2 max-w-2xl mx-auto">
+                    {t('upgradeDescription')}
                 </DialogDescription>
-                 <TabsList className="grid w-full grid-cols-3 mx-auto max-w-md mt-4">
-                    <TabsTrigger value="premium">Premium Plans</TabsTrigger>
-                    <TabsTrigger value="freemium">Freemium Code</TabsTrigger>
-                    <TabsTrigger value="developer">Developer</TabsTrigger>
+                <div className="flex justify-center mt-6">
+                    <Link href="/upgrade" onClick={() => onOpenChange(false)}>
+                        <Button variant="outline" className="rounded-full border-primary/30 bg-primary/5 text-primary hover:bg-primary/10 gap-2 px-6">
+                            <Sparkles className="w-4 h-4" />
+                            {t('compareFeatures')} →
+                        </Button>
+                    </Link>
+                </div>
+                 <TabsList className="grid w-full grid-cols-3 mx-auto max-w-md mt-8 bg-white/5 p-1 rounded-xl border border-white/10">
+                    <TabsTrigger value="premium" className="rounded-lg data-[state=active]:bg-primary data-[state=active]:text-white">{t('plans')}</TabsTrigger>
+                    <TabsTrigger value="freemium" className="rounded-lg data-[state=active]:bg-primary data-[state=active]:text-white">{t('redeem')}</TabsTrigger>
+                    <TabsTrigger value="developer" className="rounded-lg data-[state=active]:bg-primary data-[state=active]:text-white">{t('devAccess')}</TabsTrigger>
                 </TabsList>
             </DialogHeader>
-            <TabsContent value="premium" className="px-6 pb-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            
+            <TabsContent value="premium" className="px-8 pb-8 mt-0">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    {/* Monthly Plan */}
                     <Card 
-                        className={cn("cursor-pointer border-2 flex flex-col", selectedPlan === 'monthly' ? "border-primary shadow-lg" : "border-border")}
+                        className={cn(
+                            "cursor-pointer border-2 flex flex-col transition-all duration-500 group relative overflow-hidden", 
+                            selectedPlan === 'monthly' ? "border-blue-500/50 bg-blue-500/5 shadow-[0_0_40px_rgba(59,130,246,0.1)]" : "border-white/5 bg-white/[0.02] hover:border-white/20"
+                        )}
                         onClick={() => setSelectedPlan('monthly')}
                     >
+                        <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                         <CardHeader>
-                            <CardTitle className="flex items-center gap-2">Monthly</CardTitle>
-                            <CardDescription>Perfect for short-term projects.</CardDescription>
+                            <div className="flex justify-between items-center">
+                                <CardTitle className="text-2xl font-bold text-blue-400">{t('premiumPro')}</CardTitle>
+                                <Badge variant="outline" className="border-blue-500/30 text-blue-400">{t('monthly')}</Badge>
+                            </div>
+                            <CardDescription className="text-white/60">{t('premiumProDesc')}</CardDescription>
                         </CardHeader>
-                        <CardContent className="flex-grow space-y-4">
+                        <CardContent className="flex-grow space-y-6">
                             {pricesLoading ? (
-                                <div className="h-[52px] flex items-center"><Loader2 className="animate-spin text-muted-foreground" /></div>
+                                <div className="h-[60px] flex items-center"><Loader2 className="animate-spin text-primary" /></div>
                             ) : (
-                                <div className="text-4xl font-bold">
-                                    ₹{monthlyPrice} <span className="text-lg text-muted-foreground line-through">₹{defaultPlans.monthly.price}</span>
-                                    <span className="text-sm text-muted-foreground"> / month</span>
+                                <div className="flex items-baseline gap-2">
+                                    <span className="text-5xl font-black">₹{monthlyPrice}</span>
+                                    <span className="text-muted-foreground line-through text-xl">₹{defaultPlans.monthly.price}</span>
+                                    <span className="text-sm text-muted-foreground">/{t('mo')}</span>
                                 </div>
                             )}
-                            <ul className="space-y-2 text-sm text-muted-foreground">
-                                {defaultPlans.monthly.features.map(feat => (
-                                    <li key={feat} className="flex items-center gap-2">
-                                        <CheckCircle className="w-4 h-4 text-green-500" />
+                            <ul className="space-y-3">
+                                {[
+                                    t('featUnlimitedExec'),
+                                    t('featAllTools'),
+                                    t('featNoWatermarks'),
+                                    t('featPrioritySupport')
+                                ].map(feat => (
+                                    <li key={feat} className="flex items-center gap-3 text-sm text-white/80">
+                                        <div className="p-1 rounded-full bg-blue-500/20">
+                                            <CheckCircle className="w-3 h-3 text-blue-400" />
+                                        </div>
                                         <span>{feat}</span>
                                     </li>
                                 ))}
                             </ul>
                         </CardContent>
                         <CardFooter>
-                            <Button className="w-full" variant={selectedPlan === 'monthly' ? 'default' : 'outline'} onClick={() => handlePayment('monthly')} disabled={isLoading !== null || pricesLoading}>
-                                {isLoading === 'monthly' ? <Loader2 className="animate-spin" /> : "Choose Monthly"}
+                            <Button 
+                                className={cn(
+                                    "w-full h-12 text-lg font-bold transition-all",
+                                    selectedPlan === 'monthly' ? "bg-blue-600 hover:bg-blue-500 text-white shadow-lg" : "bg-white/5 hover:bg-white/10 text-white"
+                                )}
+                                onClick={() => handlePayment('monthly')} 
+                                disabled={isLoading !== null || pricesLoading}
+                            >
+                                {isLoading === 'monthly' ? <Loader2 className="animate-spin" /> : `${t('activate')} Pro`}
                             </Button>
                         </CardFooter>
                     </Card>
 
+                    {/* Yearly Plan */}
                     <Card 
-                        className={cn("cursor-pointer border-2 flex flex-col relative", selectedPlan === 'yearly' ? "border-primary shadow-lg" : "border-border")}
+                        className={cn(
+                            "cursor-pointer border-2 flex flex-col relative transition-all duration-500 group overflow-hidden", 
+                            selectedPlan === 'yearly' ? "border-primary shadow-[0_0_50px_hsl(var(--primary)/0.2)] bg-primary/5" : "border-white/5 bg-white/[0.02] hover:border-white/20"
+                        )}
                         onClick={() => setSelectedPlan('yearly')}
                     >
-                        <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-yellow-400 text-yellow-900 px-3 py-1 text-xs font-bold rounded-full">
+                        <div className="absolute top-0 right-0 bg-primary text-white text-[10px] font-black px-4 py-1.5 rounded-bl-xl uppercase tracking-widest z-10">
                             BEST VALUE
                         </div>
+                        <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                        
                         <CardHeader>
-                            <CardTitle className="flex items-center gap-2">Yearly</CardTitle>
-                            <CardDescription>Get the best value and save big.</CardDescription>
+                            <div className="flex justify-between items-center">
+                                <CardTitle className="text-2xl font-bold text-primary flex items-center gap-2">
+                                    <Crown className="w-6 h-6 text-amber-400" />
+                                    {t('premiumUltra')}
+                                </CardTitle>
+                                <Badge className="bg-primary/20 text-primary border-primary/30">{t('yearly')}</Badge>
+                            </div>
+                            <CardDescription className="text-white/60">{t('premiumUltraDesc')}</CardDescription>
                         </CardHeader>
-                        <CardContent className="flex-grow space-y-4">
+                        <CardContent className="flex-grow space-y-6">
                              {pricesLoading ? (
-                                <div className="h-[52px] flex items-center"><Loader2 className="animate-spin text-muted-foreground" /></div>
+                                <div className="h-[60px] flex items-center"><Loader2 className="animate-spin text-primary" /></div>
                             ) : (
-                                <div className="text-4xl font-bold">
-                                    ₹{yearlyPrice} <span className="text-lg text-muted-foreground line-through">₹{defaultPlans.yearly.price}</span>
-                                    <span className="text-sm text-muted-foreground"> / year</span>
+                                <div className="flex items-baseline gap-2">
+                                    <span className="text-5xl font-black">₹{yearlyPrice}</span>
+                                    <span className="text-muted-foreground line-through text-xl">₹{defaultPlans.yearly.price}</span>
+                                    <span className="text-sm text-muted-foreground">/{t('yr')}</span>
                                 </div>
                             )}
-                            <ul className="space-y-2 text-sm text-muted-foreground">
-                                {defaultPlans.yearly.features.map(feat => (
-                                    <li key={feat} className="flex items-center gap-2">
-                                        <CheckCircle className="w-4 h-4 text-green-500" />
-                                        <span>{feat}</span>
+                            <ul className="space-y-3">
+                                {[
+                                    t('featEverythingPro'),
+                                    t('featAdvancedModel'),
+                                    t('feat8kUpscale'),
+                                    t('featEarlyAccess'),
+                                    t('featSave40')
+                                ].map(feat => (
+                                    <li key={feat} className="flex items-center gap-3 text-sm text-white/90">
+                                        <div className="p-1 rounded-full bg-primary/20">
+                                            <CheckCircle className="w-3 h-3 text-primary" />
+                                        </div>
+                                        <span className={feat.includes('Save') || feat.includes('बचाएं') ? "text-primary font-bold" : ""}>{feat}</span>
                                     </li>
                                 ))}
                             </ul>
                         </CardContent>
                         <CardFooter>
-                            <Button className="w-full" variant={selectedPlan === 'yearly' ? 'default' : 'outline'} onClick={() => handlePayment('yearly')} disabled={isLoading !== null || pricesLoading}>
-                                {isLoading === 'yearly' ? <Loader2 className="animate-spin" /> : "Choose Yearly"}
+                            <Button 
+                                className={cn(
+                                    "w-full h-12 text-lg font-black transition-all",
+                                    selectedPlan === 'yearly' ? "bg-primary hover:bg-primary/90 text-white shadow-[0_0_30px_hsl(var(--primary)/0.4)]" : "bg-white/5 hover:bg-white/10 text-white"
+                                )}
+                                onClick={() => handlePayment('yearly')} 
+                                disabled={isLoading !== null || pricesLoading}
+                            >
+                                {isLoading === 'yearly' ? <Loader2 className="animate-spin" /> : "DEPLOY ULTRA"}
                             </Button>
                         </CardFooter>
                     </Card>
@@ -403,7 +472,8 @@ export function SubscriptionModal({ isOpen, onOpenChange }: SubscriptionModalPro
                      </CardContent>
                 </Card>
             </TabsContent>
-        </Tabs>
+          </Tabs>
+        </div>
       </DialogContent>
     </Dialog>
   );
