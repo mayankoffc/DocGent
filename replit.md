@@ -53,6 +53,13 @@ The app uses a comprehensive "liquid glass" UI design system with:
 Card, Dialog, AlertDialog, Button, Input, Textarea, Select, Dropdown (including nested submenus), Popover, Tabs, Toast, Tooltip, Sheet, Switch, Badge, Alert, Menubar (root, content, subcontent), Sidebar, Header, Dashboard cards, Settings
 
 ## Recent Changes
+- January 17, 2026: Fixed all tools to be 100% functional
+  - Document Generator: Fixed page sizes (A3, A4, A5) to actually produce correct size PDFs when exported
+  - Document Converter: Completely rewritten - now actually converts documents (PDF↔TXT↔HTML) instead of returning dummy text
+  - All dropdown options verified to be connected to actual functionality
+  - Watermark Adder: Position, opacity, font size, angle all work properly
+  - Exam Paper Generator: Curriculum, language, difficulty all affect output
+  - Image Upscaler: Resolution and HDR effect properly passed to AI
 - January 17, 2026: Made all text content professional and DOCGENTOR-branded
   - Updated app name from "DocGent" to "DOCGENTOR" throughout the app
   - Simplified tool names: Document Generator, Exam Paper Generator, Notes Generator, Resume Builder, etc.
