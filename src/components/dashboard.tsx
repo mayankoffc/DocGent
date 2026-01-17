@@ -92,7 +92,7 @@ export function Dashboard() {
             </div>
             
             <div className="relative">
-                <Card className="lg:col-span-2 bg-[rgba(20,20,20,0.7)] backdrop-blur-2xl text-white p-8 flex flex-col justify-between rounded-3xl min-h-[200px] border border-white/[0.08] shadow-[0_8px_32px_rgba(0,0,0,0.4),inset_0_1px_0_rgba(255,255,255,0.1)] relative overflow-hidden">
+                <Card className="lg:col-span-2 bg-white/[0.08] backdrop-blur-[30px] backdrop-saturate-[1.8] text-white p-8 flex flex-col justify-between rounded-3xl min-h-[200px] border border-white/[0.18] shadow-[0_8px_32px_rgba(31,38,135,0.2),inset_0_1px_0_rgba(255,255,255,0.25),inset_0_-1px_0_rgba(255,255,255,0.1)] relative overflow-hidden">
                    {/* Glass shine effect */}
                    <div className="absolute inset-0 bg-gradient-to-br from-white/[0.08] via-transparent to-transparent pointer-events-none" />
                    <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
@@ -140,7 +140,7 @@ export function Dashboard() {
 
                         return (
                         <Link href={`/tool/${tool.tool}`} key={tool.tool} passHref>
-                          <Card className="group cursor-pointer transition-all duration-300 hover:-translate-y-1 relative h-full bg-[rgba(20,20,20,0.6)] backdrop-blur-xl border-white/[0.08] hover:bg-[rgba(30,30,30,0.7)] hover:border-white/[0.12]">
+                          <Card className="group cursor-pointer transition-all duration-300 hover:-translate-y-1 relative h-full bg-white/[0.06] backdrop-blur-[20px] backdrop-saturate-[1.6] border-white/[0.15] hover:bg-white/[0.12] hover:border-white/[0.25] shadow-[inset_0_1px_0_rgba(255,255,255,0.15)]">
                               {isPremium && (
                                 isPremiumUser ? (
                                     <Badge variant="secondary" className="badge-glossy absolute -top-2 -right-2 bg-gradient-to-br from-green-500 to-emerald-600 text-white border-none shadow-md z-10">

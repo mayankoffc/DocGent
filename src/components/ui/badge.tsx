@@ -9,13 +9,13 @@ const badgeVariants = cva(
     variants: {
       variant: {
         default:
-          "border-transparent bg-primary/90 text-primary-foreground hover:bg-primary shadow-[0_0_15px_hsl(var(--primary)/0.3)]",
+          "border-transparent bg-primary/90 text-primary-foreground hover:bg-primary shadow-[0_0_15px_hsl(var(--primary)/0.3),inset_0_1px_0_rgba(255,255,255,0.2)]",
         secondary:
-          "border-transparent bg-secondary/20 text-secondary-foreground hover:bg-secondary/30 border border-secondary/40 backdrop-blur-sm",
+          "border-white/[0.15] bg-white/[0.08] text-secondary-foreground hover:bg-white/[0.15] backdrop-blur-[12px] backdrop-saturate-[1.4] shadow-[inset_0_1px_0_rgba(255,255,255,0.15)]",
         destructive:
-          "border-transparent bg-destructive/90 text-destructive-foreground hover:bg-destructive shadow-[0_0_15px_hsl(var(--destructive)/0.3)]",
-        outline: "text-foreground border-white/20 bg-white/5 backdrop-blur-sm hover:bg-white/10",
-        glass: "border-white/10 bg-white/5 backdrop-blur-md text-foreground hover:bg-white/10",
+          "border-transparent bg-destructive/90 text-destructive-foreground hover:bg-destructive shadow-[0_0_15px_hsl(var(--destructive)/0.3),inset_0_1px_0_rgba(255,255,255,0.15)]",
+        outline: "text-foreground border-white/[0.15] bg-white/[0.06] backdrop-blur-[12px] hover:bg-white/[0.12] shadow-[inset_0_1px_0_rgba(255,255,255,0.1)]",
+        glass: "border-white/[0.15] bg-white/[0.08] backdrop-blur-[16px] backdrop-saturate-[1.6] text-foreground hover:bg-white/[0.15] shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]",
       },
     },
     defaultVariants: {

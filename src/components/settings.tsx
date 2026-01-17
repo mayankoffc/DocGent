@@ -301,8 +301,8 @@ export function SettingsPage() {
                 <p className="text-muted-foreground">{t('settingsDescription')}</p>
             </div>
 
-            <Card className="overflow-hidden border-white/10 bg-white/[0.02] backdrop-blur-xl">
-                <CardHeader className="border-b border-white/5 bg-white/[0.02]">
+            <Card className="overflow-hidden border-white/[0.15] bg-white/[0.08] backdrop-blur-[24px] backdrop-saturate-[1.6] shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]">
+                <CardHeader className="border-b border-white/[0.1] bg-white/[0.04]">
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-4">
                             <div className="relative">

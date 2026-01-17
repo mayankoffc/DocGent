@@ -40,7 +40,7 @@ export function AppHeader({ activeTool = "" }: AppHeaderProps) {
   const isPremium = subscription.status === 'active' || subscription.status === 'trial';
 
   return (
-    <header className="sticky top-0 z-10 flex h-16 items-center justify-between gap-4 border-b border-white/[0.06] bg-[rgba(10,10,10,0.8)] px-4 backdrop-blur-xl sm:px-6">
+    <header className="sticky top-0 z-10 flex h-16 items-center justify-between gap-4 border-b border-white/[0.15] bg-white/[0.08] px-4 backdrop-blur-[24px] backdrop-saturate-[1.6] shadow-[inset_0_-1px_0_rgba(255,255,255,0.1)] sm:px-6">
       <Sheet>
         <SheetTrigger asChild>
           <Button variant="outline" size="icon" className="shrink-0 md:hidden">
