@@ -15,43 +15,43 @@ import { AppHeader } from "@/components/header";
 
 const features = [
     {
-        title: "Intelligence Engine",
-        description: "Access our most sophisticated architectural models for complex document synthesis and deep analysis.",
+        title: "AI Document Generator",
+        description: "Create essays, reports, letters, and presentations instantly with advanced AI.",
         icon: Brain,
         color: "text-purple-400",
         bg: "bg-purple-400/10"
     },
     {
-        title: "Executive Editor",
-        description: "Professional drafting suite with advanced refactoring, structural formatting, and multi-vector exports.",
+        title: "Document Editor",
+        description: "Improve grammar, tone, and structure of any document with AI assistance.",
         icon: FileEdit,
         color: "text-blue-400",
         bg: "bg-blue-400/10"
     },
     {
-        title: "8K Visual Optimizer",
-        description: "Enhance low-fidelity imagery into hyper-clear 8K professional assets with neural clarity.",
+        title: "Image Enhancer",
+        description: "Enhance low-quality images up to 8K resolution with AI upscaling.",
         icon: Image,
         color: "text-emerald-400",
         bg: "bg-emerald-400/10"
     },
     {
-        title: "Academic Architect",
-        description: "Deconstruct complex curricula and exam structures with rigorous step-by-step logic.",
+        title: "Question Solver",
+        description: "Upload any question paper and get detailed step-by-step solutions.",
         icon: BookOpenCheck,
         color: "text-amber-400",
         bg: "bg-amber-400/10"
     },
     {
-        title: "Blueprint Designer",
-        description: "Engineer comprehensive project architectures, technical schematics, and structural blueprints.",
+        title: "Project Planner",
+        description: "Create detailed project plans with materials list and step-by-step instructions.",
         icon: DraftingCompass,
         color: "text-rose-400",
         bg: "bg-rose-400/10"
     },
     {
-        title: "Neural Script OCR",
-        description: "Transform analog handwritten manuscripts into high-fidelity, structured digital assets.",
+        title: "Handwriting Generator",
+        description: "Convert typed text into realistic handwritten style documents.",
         icon: PenSquare,
         color: "text-cyan-400",
         bg: "bg-cyan-400/10"
@@ -59,12 +59,12 @@ const features = [
 ];
 
 const additionalPerks = [
-    "Unlimited Daily Executions",
-    "High-Fidelity Clean Exports",
-    "Tier-1 Priority Support",
-    "Zero-Interruption Experience",
-    "Beta Access to Lab Tools",
-    "Batch Processing Pipeline"
+    "Unlimited Document Generations",
+    "No Watermarks on Downloads",
+    "Priority Customer Support",
+    "Ad-Free Experience",
+    "Early Access to New Features",
+    "Bulk Document Processing"
 ];
 
 const CrossMark = () => (
@@ -122,14 +122,14 @@ export default function UpgradePage() {
                     <div className="flex flex-col items-center">
                         <Badge variant="outline" className="px-4 py-1 border-primary/30 bg-primary/5 text-primary mb-4 animate-subtle-glow">
                             <Crown className="w-3 h-3 mr-2" />
-                            Premium Excellence
+                            DOCGENTOR Premium
                         </Badge>
                         <motion.h1 
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             className="text-5xl md:text-8xl font-bold tracking-tighter bg-clip-text text-transparent bg-gradient-to-b from-white via-white to-white/20 leading-tight"
                         >
-                            Architect Your <br /> Future with Ultra
+                            Upgrade to <br /> Premium
                         </motion.h1>
                         <motion.p 
                             initial={{ opacity: 0, y: 20 }}
@@ -137,7 +137,7 @@ export default function UpgradePage() {
                             transition={{ delay: 0.1 }}
                             className="text-lg md:text-2xl text-muted-foreground max-w-3xl mx-auto mt-8 font-light leading-relaxed"
                         >
-                            Transcend traditional limitations. Deploy a comprehensive suite of intelligence tools engineered for professionals who define excellence.
+                            Unlock all features. Create unlimited documents, get priority support, and enjoy an ad-free experience.
                         </motion.p>
                     </div>
                 </div>
@@ -147,21 +147,21 @@ export default function UpgradePage() {
                     {/* Free Plan */}
                     <Card className="bg-white/[0.02] border-white/10 backdrop-blur-xl relative overflow-hidden group h-fit">
                         <CardHeader className="pb-8">
-                            <CardTitle className="text-xl font-medium text-muted-foreground">Standard</CardTitle>
+                            <CardTitle className="text-xl font-medium text-muted-foreground">Free</CardTitle>
                             <div className="flex items-baseline gap-1 mt-4">
                                 <span className="text-5xl font-bold">₹0</span>
                                 <span className="text-muted-foreground">/forever</span>
                             </div>
-                            <CardDescription className="mt-4">Basic utility for general tasks.</CardDescription>
+                            <CardDescription className="mt-4">Basic access to get started.</CardDescription>
                         </CardHeader>
                         <CardContent className="space-y-6">
                             <ul className="space-y-4">
                                 {[
-                                    "5 Daily Executions",
-                                    "Standard Engine Access",
-                                    "Basic Drafting Tools",
-                                    "Community Support",
-                                    "High-Latency Exports"
+                                    "5 Documents Per Day",
+                                    "Basic AI Features",
+                                    "Standard Tools Access",
+                                    "Email Support",
+                                    "Watermarked Downloads"
                                 ].map((item) => (
                                     <li key={item} className="flex items-center gap-3 text-sm text-muted-foreground/80">
                                         <div className="h-1.5 w-1.5 rounded-full bg-white/20" />
@@ -182,23 +182,23 @@ export default function UpgradePage() {
                         <div className="absolute inset-0 bg-gradient-to-b from-blue-500/5 to-transparent pointer-events-none" />
                         <CardHeader className="pb-8">
                             <div className="flex justify-between items-start">
-                                <CardTitle className="text-xl font-medium text-blue-400">Premium Pro</CardTitle>
+                                <CardTitle className="text-xl font-medium text-blue-400">Premium Monthly</CardTitle>
                                 <Badge className="bg-blue-500/20 text-blue-400 border-blue-500/30">Monthly</Badge>
                             </div>
                             <div className="flex items-baseline gap-1 mt-4">
                                 <span className="text-5xl font-bold">₹29</span>
                                 <span className="text-muted-foreground">/month</span>
                             </div>
-                            <CardDescription className="mt-4">Strategic access for specific workflows.</CardDescription>
+                            <CardDescription className="mt-4">Full access, billed monthly.</CardDescription>
                         </CardHeader>
                         <CardContent className="space-y-6">
                             <ul className="space-y-4">
                                 {[
-                                    "Unlimited Executions",
-                                    "Total Feature Access",
-                                    "Professional Clean Exports",
-                                    "Tier-1 Priority Support",
-                                    "Zero-Ad Interface"
+                                    "Unlimited Documents",
+                                    "All Tools Access",
+                                    "No Watermarks",
+                                    "Priority Support",
+                                    "Ad-Free Experience"
                                 ].map((item) => (
                                     <li key={item} className="flex items-center gap-3 text-sm">
                                         <Check className="w-4 h-4 text-blue-400" />
@@ -212,7 +212,7 @@ export default function UpgradePage() {
                                 className="w-full bg-blue-600 hover:bg-blue-500 text-white shadow-[0_0_20px_rgba(59,130,246,0.3)]"
                                 onClick={() => handleSubscribe("monthly")}
                             >
-                                Activate Pro
+                                Get Monthly
                             </Button>
                         </CardFooter>
                     </Card>
@@ -220,7 +220,7 @@ export default function UpgradePage() {
                     {/* Premium Ultra (Yearly) */}
                     <Card className="bg-white/[0.05] border-primary/50 backdrop-blur-3xl relative overflow-hidden group scale-105 shadow-[0_0_80px_hsl(var(--primary)/0.15)] border-t-primary">
                         <div className="absolute top-0 right-0 bg-primary text-white text-[10px] font-bold px-4 py-1.5 rounded-bl-xl uppercase tracking-widest">
-                            Most Strategic
+                            Best Value
                         </div>
                         <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-transparent to-transparent pointer-events-none" />
                         
@@ -228,19 +228,19 @@ export default function UpgradePage() {
                             <div className="flex justify-between items-start">
                                 <CardTitle className="text-2xl font-bold text-primary flex items-center gap-2">
                                     <Crown className="w-6 h-6 text-amber-400" />
-                                    Premium Ultra
+                                    Premium Yearly
                                 </CardTitle>
-                                <Badge className="bg-primary/20 text-primary border-primary/30">Yearly</Badge>
+                                <Badge className="bg-primary/20 text-primary border-primary/30">Save 40%</Badge>
                             </div>
                             <div className="flex items-baseline gap-1 mt-4">
                                 <span className="text-6xl font-black">₹199</span>
                                 <span className="text-muted-foreground">/year</span>
                             </div>
-                            <CardDescription className="mt-4 text-white/70">The ultimate ecosystem for power users.</CardDescription>
+                            <CardDescription className="mt-4 text-white/70">Full access for the whole year at the best price.</CardDescription>
                         </CardHeader>
                         <CardContent className="space-y-6">
                             <div className="p-4 rounded-xl bg-primary/10 border border-primary/20 mb-4">
-                                <p className="text-xs font-bold text-primary uppercase tracking-wider mb-2">Ultra-Exclusive Utilities:</p>
+                                <p className="text-xs font-bold text-primary uppercase tracking-wider mb-2">Everything Included:</p>
                                 <ul className="space-y-3">
                                     {features.slice(0, 4).map((f) => (
                                         <li key={f.title} className="flex items-center gap-3 text-sm">
@@ -264,7 +264,7 @@ export default function UpgradePage() {
                                 className="w-full bg-primary hover:bg-primary/90 text-white shadow-[0_0_30px_hsl(var(--primary)/0.5)] h-14 text-xl font-black rounded-xl group-hover:scale-[1.02] transition-transform"
                                 onClick={() => handleSubscribe("yearly")}
                             >
-                                DEPLOY ULTRA
+                                Get Yearly
                                 <Rocket className="ml-2 w-5 h-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
                             </Button>
                         </CardFooter>
@@ -274,8 +274,8 @@ export default function UpgradePage() {
                 {/* Feature Showcase */}
                 <div className="space-y-20 mb-32">
                     <div className="text-center space-y-4">
-                        <h2 className="text-4xl md:text-6xl font-bold tracking-tight">Enterprise Infrastructure</h2>
-                        <p className="text-xl text-muted-foreground max-w-2xl mx-auto">Scalable solutions to architect, analyze, and execute high-stakes documents.</p>
+                        <h2 className="text-4xl md:text-6xl font-bold tracking-tight">Premium Features</h2>
+                        <p className="text-xl text-muted-foreground max-w-2xl mx-auto">Unlock powerful tools to create any document you need.</p>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                         {features.map((feature, i) => (

@@ -53,6 +53,14 @@ The app uses a comprehensive "liquid glass" UI design system with:
 Card, Dialog, AlertDialog, Button, Input, Textarea, Select, Dropdown (including nested submenus), Popover, Tabs, Toast, Tooltip, Sheet, Switch, Badge, Alert, Menubar (root, content, subcontent), Sidebar, Header, Dashboard cards, Settings
 
 ## Recent Changes
+- January 17, 2026: Made all text content professional and DOCGENTOR-branded
+  - Updated app name from "DocGent" to "DOCGENTOR" throughout the app
+  - Simplified tool names: Document Generator, Exam Paper Generator, Notes Generator, Resume Builder, etc.
+  - Made dashboard taglines clear and simple
+  - Updated upgrade/membership page with cleaner pricing and feature descriptions
+  - Simplified help center content with easy-to-understand language
+  - Updated all placeholder texts to be more relatable examples
+  - Changed technical jargon to simple English across all translations
 - January 17, 2026: Completed comprehensive liquid glass UI implementation across ALL components
   - Updated 20+ UI components with consistent glass styling
   - Applied liquid glass to page-level components: Header, Dashboard, Settings, Sidebar
